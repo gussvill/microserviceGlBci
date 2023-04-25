@@ -6,11 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.util.UUID;
 
 
@@ -29,7 +25,21 @@ public class User {
     )
     private UUID id;
 
+    private String created;
+
+    private String lastLogin;
+
+    private String token;
+
+    private Boolean isActive;
+
     private String name;
 
-    private BigDecimal balance;
+    private String email;
+
+    private String password;
+
+    @Embedded
+    private Phones phones;
+
 }
