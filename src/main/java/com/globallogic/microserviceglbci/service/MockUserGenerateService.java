@@ -15,6 +15,8 @@ public class MockUserGenerateService {
 
     public void generateUsers() {
 
+        JavaUtils.encryptKey("testPass1");
+
         User account1 = User.builder()
                 .created(JavaUtils.generateDate())
                 .lastLogin("test2")
@@ -22,7 +24,7 @@ public class MockUserGenerateService {
                 .isActive(true)
                 .name("Julio Gonzalez")
                 .email("julio@testssw.cl")
-                .password("testPass1")
+                .password(JavaUtils.encryptKey("testPass1"))
                 .phones(new Phones(87650009, 7, "25"))
                 .build();
         userRepository.save(account1);
@@ -34,7 +36,7 @@ public class MockUserGenerateService {
                 .isActive(false)
                 .name("Roger Federer")
                 .email("roger.federer@gmail.com")
-                .password("testPass2")
+                .password(JavaUtils.encryptKey("testPass2"))
                 .phones(new Phones(52555766, 2, "56"))
                 .build();
 
