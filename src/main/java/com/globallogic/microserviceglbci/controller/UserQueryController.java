@@ -21,7 +21,7 @@ public class UserQueryController {
         this.userQueryService = userQueryService;
     }
 
-    @GetMapping("/{accountId}")
+    @GetMapping("/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable(value = "userId") Long userId) {
         Optional<User> userOpt = userQueryService.getUserById(userId);
         return userOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
