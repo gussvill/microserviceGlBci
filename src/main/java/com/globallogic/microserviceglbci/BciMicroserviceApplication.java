@@ -17,6 +17,7 @@ public class BciMicroserviceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BciMicroserviceApplication.class, args);
+        log.info("springboot and pwd encryption jasypt application started successfully.");
     }
 
 }
