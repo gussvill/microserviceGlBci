@@ -15,7 +15,7 @@ public class UserQueryService {
     private UserRepository userRepository;
 
     public Optional<User> getUserById(Long userId) {
-        return  userRepository.findById(userId);
+        return userRepository.findById(userId);
     }
 
     public List<User> getUsers() {
