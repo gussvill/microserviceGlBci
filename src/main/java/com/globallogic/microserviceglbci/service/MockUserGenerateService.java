@@ -7,9 +7,6 @@ import com.globallogic.microserviceglbci.utils.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Service
 public class MockUserGenerateService {
 

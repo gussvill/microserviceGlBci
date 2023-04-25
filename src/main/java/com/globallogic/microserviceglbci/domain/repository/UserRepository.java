@@ -4,5 +4,10 @@ package com.globallogic.microserviceglbci.domain.repository;
 import com.globallogic.microserviceglbci.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    List<User> findByNameContaining(String name);
+
 }

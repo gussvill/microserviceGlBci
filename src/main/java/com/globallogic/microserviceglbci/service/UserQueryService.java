@@ -21,4 +21,9 @@ public class UserQueryService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
+    public void deleteUsers() {
+        userRepository.deleteAll();
+    }
+
 }

@@ -42,4 +42,10 @@ public class User {
     @Embedded
     private Phones phones;
 
+    public User(String name, String email, String password, Phones phones) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phones = phones;
+    }
 }
