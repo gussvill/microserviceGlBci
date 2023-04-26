@@ -5,9 +5,9 @@ spring:
     name: springboot-bci-microservice
   datasource:
     driverClassName: org.h2.Driver
-    password: ENC(fl8OJudxGl4GXBnbDD140Ujo5kDAZFOm)
-    url: 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL;NON_KEYWORDS=USER'
-    username: ENC(BJQ0oyj1UVjIbV1Z2wUzlA==)
+    password: h2
+    url: 'jdbc:h2:mem:testdb'
+    username: h2
   h2:
     console:
       enabled: true

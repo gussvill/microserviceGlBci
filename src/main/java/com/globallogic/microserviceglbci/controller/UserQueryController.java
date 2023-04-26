@@ -1,12 +1,14 @@
 package com.globallogic.microserviceglbci.controller;
 
-import com.globallogic.microserviceglbci.domain.entity.User;
-import com.globallogic.microserviceglbci.domain.repository.UserRepository;
-import com.globallogic.microserviceglbci.service.UserQueryService;
+import com.globallogic.microserviceglbci.domain.entity.Usuario;
+import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
+import com.globallogic.microserviceglbci.exceptions.CustomParameterConstraintException;
+import com.globallogic.microserviceglbci.service.UsuarioQueryService;
 import com.globallogic.microserviceglbci.utils.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -18,50 +20,50 @@ import java.util.Optional;
 @RequestMapping(value = "/user")
 public class UserQueryController {
 
-    private final UserQueryService userQueryService;
+    private final UsuarioQueryService usuarioQueryService;
 
     @Autowired
-    UserRepository userRepository;
+    UsuarioRepository usuarioRepository;
 
-    public UserQueryController(UserQueryService userQueryService) {
-        this.userQueryService = userQueryService;
+    public UserQueryController(UsuarioQueryService usuarioQueryService) {
+        this.usuarioQueryService = usuarioQueryService;
     }
 
     @GetMapping("/{name}")
-    public List<User> getUserByName(@PathVariable(value = "name") String name) {
-        List<User> userList = userQueryService.getUserByName(name);
-        return userList;
+    public List<Usuario> getUserByName(@PathVariable(value = "name") String name) {
+        List<Usuario> usuarioList = usuarioQueryService.getUserByName(name);
+        return usuarioList;
     }
 
     @GetMapping("/list")
-    public List<User> getAccounts() {
-        return userQueryService.getUsers();
+    public List<Usuario> getAccounts() {
+        return usuarioQueryService.getUsers();
     }
 
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllTutorials(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<Usuario>> getAllTutorials(@RequestParam(required = false) String name) {
         try {
-            List<User> users = new ArrayList<User>();
+            List<Usuario> usuarios = new ArrayList<Usuario>();
 
             if (name == null)
-                userRepository.findAll().forEach(users::add);
+                usuarioRepository.findAll().forEach(usuarios::add);
             else
-                userRepository.findByNameContaining(name).forEach(users::add);
+                usuarioRepository.findByNameContaining(name).forEach(usuarios::add);
 
-            if (users.isEmpty()) {
+            if (usuarios.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            return new ResponseEntity<>(usuarios, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
-        Optional<User> userData = userRepository.findById(id);
+    public ResponseEntity<Usuario> getUserById(@PathVariable("id") long id) {
+        Optional<Usuario> userData = usuarioRepository.findById(id);
 
         if (userData.isPresent()) {
             return new ResponseEntity<>(userData.get(), HttpStatus.OK);
@@ -71,35 +73,35 @@ public class UserQueryController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) {
         try {
 
-            List<User> userList = userQueryService.getUserByName(user.getName());
+            List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
 
-            if(userList.isEmpty()){
-                User _user = userQueryService.save(new User(JavaUtils.generateDate(), JavaUtils.generateDate(), user.getName(), user.getEmail(), JavaUtils.encryptKey(user.getPassword())));
-                return new ResponseEntity<>(_user, HttpStatus.CREATED);
+            if(usuarioList.isEmpty()){
+                Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), new BCryptPasswordEncoder().encode(usuario.getPassword())));
+                return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
             }
             else{
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                throw new CustomParameterConstraintException("El usuario ya existe!!!");
             }
 
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomParameterConstraintException("El usuario ya existe!!!");
         }
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
-        Optional<User> userData = userRepository.findById(id);
+    public ResponseEntity<Usuario> updateUser(@PathVariable("id") long id, @RequestBody Usuario usuario) {
+        Optional<Usuario> userData = usuarioRepository.findById(id);
 
         if (userData.isPresent()) {
-            User _user = userData.get();
-            _user.setName(user.getName());
-            _user.setEmail(user.getEmail());
-            _user.setPassword(user.getPassword());
+            Usuario _usuario = userData.get();
+            _usuario.setName(usuario.getName());
+            _usuario.setEmail(usuario.getEmail());
+            _usuario.setPassword(usuario.getPassword());
 //            _user.setPhones(user.getPhones());
-            return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
+            return new ResponseEntity<>(usuarioRepository.save(_usuario), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -108,23 +110,11 @@ public class UserQueryController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
         try {
-            userRepository.deleteById(id);
+            usuarioRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @DeleteMapping("/users")
-    public ResponseEntity<HttpStatus> deleteAllUsers() {
-        try {
-            userQueryService.deleteUsers();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-    }
-
 
 }

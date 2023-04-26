@@ -1,6 +1,5 @@
 package com.globallogic.microserviceglbci.domain.entity;
 
-import com.globallogic.microserviceglbci.utils.JavaUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +11,12 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "User")
+@Table(name = "Usuario")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class Usuario {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -43,9 +42,10 @@ public class User {
 //    @Embedded
 //    private Phones phones;
 
-    public User(String created, String lastLogin, String name, String email, String password) {
+    public Usuario(String created, String lastLogin, String name, String email, String password) {
         this.created = created;
         this.lastLogin = lastLogin;
+        this.isActive = false;
         this.name = name;
         this.email = email;
         this.password = password;
