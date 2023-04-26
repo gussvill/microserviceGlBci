@@ -1,5 +1,6 @@
 package com.globallogic.microserviceglbci.domain.entity;
 
+import com.globallogic.microserviceglbci.utils.JavaUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,13 +40,15 @@ public class User {
 
     private String password;
 
-    @Embedded
-    private Phones phones;
+//    @Embedded
+//    private Phones phones;
 
-    public User(String name, String email, String password, Phones phones) {
+    public User(String created, String lastLogin, String name, String email, String password) {
+        this.created = created;
+        this.lastLogin = lastLogin;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.phones = phones;
+//        this.phones = phones;
     }
 }

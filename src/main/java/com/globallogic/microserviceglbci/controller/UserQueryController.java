@@ -3,6 +3,7 @@ package com.globallogic.microserviceglbci.controller;
 import com.globallogic.microserviceglbci.domain.entity.User;
 import com.globallogic.microserviceglbci.domain.repository.UserRepository;
 import com.globallogic.microserviceglbci.service.UserQueryService;
+import com.globallogic.microserviceglbci.utils.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,10 @@ public class UserQueryController {
         this.userQueryService = userQueryService;
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable(value = "userId") Long userId) {
-        Optional<User> userOpt = userQueryService.getUserById(userId);
-        return userOpt.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    @GetMapping("/{name}")
+    public List<User> getUserByName(@PathVariable(value = "name") String name) {
+        List<User> userList = userQueryService.getUserByName(name);
+        return userList;
     }
 
     @GetMapping("/list")
@@ -69,11 +70,20 @@ public class UserQueryController {
         }
     }
 
-    @PostMapping("/users")
+    @PostMapping("/sign-up")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         try {
-            User _user = userRepository.save(new User(user.getName(), user.getEmail(), user.getPassword(), user.getPhones()));
-            return new ResponseEntity<>(_user, HttpStatus.CREATED);
+
+            List<User> userList = userQueryService.getUserByName(user.getName());
+
+            if(userList.isEmpty()){
+                User _user = userQueryService.save(new User(JavaUtils.generateDate(), JavaUtils.generateDate(), user.getName(), user.getEmail(), JavaUtils.encryptKey(user.getPassword())));
+                return new ResponseEntity<>(_user, HttpStatus.CREATED);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -88,7 +98,7 @@ public class UserQueryController {
             _user.setName(user.getName());
             _user.setEmail(user.getEmail());
             _user.setPassword(user.getPassword());
-            _user.setPhones(user.getPhones());
+//            _user.setPhones(user.getPhones());
             return new ResponseEntity<>(userRepository.save(_user), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

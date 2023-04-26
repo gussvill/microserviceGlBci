@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserQueryService {
@@ -14,8 +13,8 @@ public class UserQueryService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<User> getUserById(Long userId) {
-        return userRepository.findById(userId);
+    public List<User> getUserByName(String name) {
+        return userRepository.findByNameContaining(name);
     }
 
     public List<User> getUsers() {
@@ -26,4 +25,7 @@ public class UserQueryService {
         userRepository.deleteAll();
     }
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 }
