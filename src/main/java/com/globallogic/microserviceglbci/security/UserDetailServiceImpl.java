@@ -16,11 +16,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-       Usuario usuario =  usuarioRepository
+        Usuario usuario = usuarioRepository
                 .findOneByName(name)
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario con userName " + name + " no existe."));
 
-       return new UserDetailsImpl(usuario);
+        return new UserDetailsImpl(usuario);
 
 
     }

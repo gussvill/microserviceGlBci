@@ -2,7 +2,7 @@ package com.globallogic.microserviceglbci.controller;
 
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
-import com.globallogic.microserviceglbci.exceptions.CustomParameterConstraintException;
+import com.globallogic.microserviceglbci.exceptions.InputValidationException;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
 import com.globallogic.microserviceglbci.utils.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/user")
 public class UserQueryController {
+
+    private static final String INVALID_USER = "El usuario ingresado ya existe, favor ingresar un usuario diferente.";
 
     private final UsuarioQueryService usuarioQueryService;
 
@@ -74,21 +76,16 @@ public class UserQueryController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) {
-        try {
 
-            List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
+        List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
 
-            if(usuarioList.isEmpty()){
-                Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), new BCryptPasswordEncoder().encode(usuario.getPassword())));
-                return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
-            }
-            else{
-                throw new CustomParameterConstraintException("El usuario ya existe!!!");
-            }
-
-        } catch (Exception e) {
-            throw new CustomParameterConstraintException("El usuario ya existe!!!");
+        if (usuarioList.isEmpty()) {
+            Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), new BCryptPasswordEncoder().encode(usuario.getPassword())));
+            return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
+        } else {
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER);
         }
+
     }
 
     @PutMapping("/users/{id}")
