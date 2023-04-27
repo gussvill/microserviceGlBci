@@ -27,6 +27,7 @@ public class UserQueryController {
 
     private static final String INVALID_USER = "El usuario ingresado ya existe, favor ingresar un usuario diferente.";
     private static final String INVALID_DATA = "Revise los datos ingresados en el contrato.";
+    private static final String INVALID_PASSWORD = "Contraseña inválida.";
 
     private final UsuarioQueryService usuarioQueryService;
 
@@ -70,6 +71,9 @@ public class UserQueryController {
             List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
 
             if (usuarioList.isEmpty()) {
+                if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
+                    throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD);
+                }
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
                 usuario.setCreated(LocalDateTime.now());
@@ -94,5 +98,5 @@ public class UserQueryController {
         }
 
     }
-    
+
 }
