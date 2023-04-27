@@ -14,7 +14,6 @@ import java.io.IOException;
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

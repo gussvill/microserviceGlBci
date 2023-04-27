@@ -40,7 +40,6 @@ public class Usuario {
     private String email;
 
     @Column(nullable = false)
-//    @Pattern(regexp = "^(?=.*\\d.*\\d)(?=.*[A-Z])(?=.*[a-z]).{8,12}$", message = "La password debe tener una mayúscula y dos números, y tener un largo mínimo de 8 y un máximo de 12 caracteres.")
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
