@@ -1,8 +1,8 @@
 package com.globallogic.microserviceglbci.exceptions;
 
 public class InputValidationException extends RuntimeException {
-    private int codigo;
-    private String detail;
+    private final int codigo;
+    private final String detail;
 
     public InputValidationException(int codigo, String detail) {
         this.codigo = codigo;

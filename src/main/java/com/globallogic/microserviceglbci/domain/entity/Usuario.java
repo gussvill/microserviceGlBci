@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -22,39 +19,27 @@ import java.util.UUID;
 @Builder
 public class Usuario {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(
-            name = "UUID",
-            strategy = "org.hibernate.id.UUIDGenerator"
-    )
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String created;
+    private LocalDateTime created;
 
-    private String lastLogin;
+    private LocalDateTime lastLogin;
 
     private String token;
 
-    private Boolean isActive;
+    private boolean isActive;
 
     private String name;
 
-    @NotNull
+    @Column(nullable = false)
     private String email;
 
-    @NotNull
+    @Column(nullable = false)
     private String password;
 
-//    @Embedded
-//    private Phones phones;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "usuario_id")
+    private List<Phone> phones;
 
-    public Usuario(String created, String lastLogin, String name, String email, String password) {
-        this.created = created;
-        this.lastLogin = lastLogin;
-        this.isActive = false;
-        this.name = name != null ? name : "";;
-        this.email = email;
-        this.password = password;
-//        this.phones = phones;
-    }
 }

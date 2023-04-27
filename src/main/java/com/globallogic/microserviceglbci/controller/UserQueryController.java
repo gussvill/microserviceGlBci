@@ -3,20 +3,20 @@ package com.globallogic.microserviceglbci.controller;
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
+import com.globallogic.microserviceglbci.response.UserResponse;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
-import com.globallogic.microserviceglbci.utils.JavaUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
@@ -45,34 +45,14 @@ public class UserQueryController {
         return usuarioList;
     }
 
-    @GetMapping("/list")
-    public List<Usuario> getAccounts() {
+    @GetMapping("/users")
+    public List<Usuario> getUsers() {
         return usuarioQueryService.getUsers();
     }
 
 
-    @GetMapping("/users")
-    public ResponseEntity<List<Usuario>> getAllTutorials(@RequestParam(required = false) String name) {
-        try {
-            List<Usuario> usuarios = new ArrayList<Usuario>();
-
-            if (name == null)
-                usuarioRepository.findAll().forEach(usuarios::add);
-            else
-                usuarioRepository.findByNameContaining(name).forEach(usuarios::add);
-
-            if (usuarios.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(usuarios, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @GetMapping("/users/{id}")
-    public ResponseEntity<Usuario> getUserById(@PathVariable("id") long id) {
+    public ResponseEntity<Usuario> getUserById(@PathVariable UUID id) {
         Optional<Usuario> userData = usuarioRepository.findById(id);
 
         if (userData.isPresent()) {
@@ -83,47 +63,40 @@ public class UserQueryController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Usuario> createUser(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody Usuario usuario) {
 
         try {
             List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
 
             if (usuarioList.isEmpty()) {
-                Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), passwordEncoder.encode(usuario.getPassword())));
-                return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
+
+                usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+                usuario.setCreated(LocalDateTime.now());
+                usuario.setLastLogin(LocalDateTime.now());
+                usuario.setToken(generateToken(usuario.getEmail()));
+                usuario.setActive(true);
+                Usuario _usuario = usuarioQueryService.save(usuario);
+
+                UserResponse userResponse = new UserResponse();
+                userResponse.setId(_usuario.getId());
+                userResponse.setCreated(_usuario.getCreated());
+                userResponse.setLastLogin(_usuario.getLastLogin());
+                userResponse.setToken(_usuario.getToken());
+                userResponse.setActive(_usuario.isActive());
+
+                return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
             } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_DATA);
         }
 
     }
 
-    @PutMapping("/users/{id}")
-    public ResponseEntity<Usuario> updateUser(@PathVariable("id") long id, @RequestBody Usuario usuario) {
-        Optional<Usuario> userData = usuarioRepository.findById(id);
-
-        if (userData.isPresent()) {
-            Usuario _usuario = userData.get();
-            _usuario.setName(usuario.getName());
-            _usuario.setEmail(usuario.getEmail());
-            _usuario.setPassword(usuario.getPassword());
-//            _user.setPhones(user.getPhones());
-            return new ResponseEntity<>(usuarioRepository.save(_usuario), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
-        try {
-            usuarioRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    // helper method to generate token
+    private String generateToken(String email) {
+        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ" + email.hashCode() + "...";
     }
 
 }
