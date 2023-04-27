@@ -4,6 +4,7 @@ import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
 import com.globallogic.microserviceglbci.response.UserResponse;
+import com.globallogic.microserviceglbci.security.TokenUtils;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -73,7 +74,7 @@ public class UserQueryController {
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
                 usuario.setCreated(LocalDateTime.now());
                 usuario.setLastLogin(LocalDateTime.now());
-                usuario.setToken(generateToken(usuario.getEmail()));
+                usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
                 usuario.setActive(true);
                 Usuario _usuario = usuarioQueryService.save(usuario);
 
@@ -93,10 +94,5 @@ public class UserQueryController {
         }
 
     }
-
-    // helper method to generate token
-    private String generateToken(String email) {
-        return "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ" + email.hashCode() + "...";
-    }
-
+    
 }
