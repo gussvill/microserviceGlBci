@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 
@@ -38,8 +39,10 @@ public class Usuario {
 
     private String name;
 
+    @NotNull
     private String email;
 
+    @NotNull
     private String password;
 
 //    @Embedded
@@ -49,7 +52,7 @@ public class Usuario {
         this.created = created;
         this.lastLogin = lastLogin;
         this.isActive = false;
-        this.name = name;
+        this.name = name != null ? name : "";;
         this.email = email;
         this.password = password;
 //        this.phones = phones;

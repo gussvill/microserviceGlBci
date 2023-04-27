@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +20,11 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping(value = "/user")
+@Validated
 public class UserQueryController {
 
     private static final String INVALID_USER = "El usuario ingresado ya existe, favor ingresar un usuario diferente.";
+    private static final String INVALID_DATA = "Revise los datos ingresados en el contrato.";
 
     private final UsuarioQueryService usuarioQueryService;
 
@@ -75,15 +79,19 @@ public class UserQueryController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> createUser(@Valid @RequestBody Usuario usuario) {
 
-        List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
+        try {
+            List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
 
-        if (usuarioList.isEmpty()) {
-            Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), new BCryptPasswordEncoder().encode(usuario.getPassword())));
-            return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
-        } else {
-            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER);
+            if (usuarioList.isEmpty()) {
+                Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), new BCryptPasswordEncoder().encode(usuario.getPassword())));
+                return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
+            } else {
+                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER);
+            }
+        }catch (Exception e){
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_DATA);
         }
 
     }
