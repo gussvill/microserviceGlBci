@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,9 @@ public class UserQueryController {
 
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserQueryController(UsuarioQueryService usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
@@ -85,7 +89,7 @@ public class UserQueryController {
             List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
 
             if (usuarioList.isEmpty()) {
-                Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), new BCryptPasswordEncoder().encode(usuario.getPassword())));
+                Usuario _usuario = usuarioQueryService.save(new Usuario(JavaUtils.generateDate(), JavaUtils.generateDate(), usuario.getName(), usuario.getEmail(), passwordEncoder.encode(usuario.getPassword())));
                 return new ResponseEntity<>(_usuario, HttpStatus.CREATED);
             } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER);
