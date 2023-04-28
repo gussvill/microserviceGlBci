@@ -14,11 +14,11 @@ import java.util.Map;
 public class TokenUtils {
 
     private final static String ACCESS_TOKEN_SECRET = "5e05050c0acc4df6be982f5d41ff18da";
-    private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = 2_592_000L;
 
     public static String createToken(String email, String password) {
-        long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1_000;
-        Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
+
+        final Date createdDate = new Date();
+        final Date expirationDate = new Date(createdDate.getTime() + 30 * 1000);
 
         Map<String, Object> extra = new HashMap<>();
         extra.put("password", password);
