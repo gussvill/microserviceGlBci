@@ -12,6 +12,7 @@ public class BciMicroserviceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BciMicroserviceApplication.class, args);
+        Runnable runner = () -> SpringApplication.run(BciMicroserviceApplication.class, args);
     }
 
 }

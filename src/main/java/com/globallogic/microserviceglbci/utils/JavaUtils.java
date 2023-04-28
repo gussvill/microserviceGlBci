@@ -11,12 +11,7 @@ public class JavaUtils {
     static String FORMAT_DATE = "MMM dd, yyyy hh:mm:ss a";
 
     public static String formattedDate() {
-
-        LocalDateTime today = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMAT_DATE);
-        String formattedDate = today.format(formatter);
-
-        return formattedDate;
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern(FORMAT_DATE));
     }
 
 }

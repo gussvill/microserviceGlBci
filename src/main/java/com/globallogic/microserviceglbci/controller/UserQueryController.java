@@ -87,7 +87,6 @@ public class UserQueryController {
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
-//                usuario.setPhones(usuario.getPhones() == null || usuario.getPhones().isEmpty() ? usuario.getPhones() : new ArrayList<>());
                 Usuario _usuario = usuarioQueryService.save(usuario);
 
                 UserResponse userResponse = new UserResponse();
