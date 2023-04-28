@@ -15,8 +15,8 @@ import java.util.UUID;
 @Builder
 public class UserResponse {
     private UUID id;
-    private LocalDateTime created;
-    private LocalDateTime lastLogin;
+    private String created;
+    private String lastLogin;
     private String token;
     private boolean isActive;
 }

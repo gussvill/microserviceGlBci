@@ -1,11 +1,14 @@
 package com.globallogic.microserviceglbci.controller;
 
+import com.globallogic.microserviceglbci.domain.entity.Phone;
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
 import com.globallogic.microserviceglbci.response.UserResponse;
 import com.globallogic.microserviceglbci.security.TokenUtils;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
+import com.globallogic.microserviceglbci.utils.JavaUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,9 +45,9 @@ public class UserQueryController {
         this.usuarioQueryService = usuarioQueryService;
     }
 
-    @GetMapping("/{name}")
-    public List<Usuario> getUserByName(@PathVariable(value = "name") String name) {
-        List<Usuario> usuarioList = usuarioQueryService.getUserByName(name);
+    @GetMapping("/{email}")
+    public List<Usuario> getUserByEmail(@PathVariable(value = "email") String email) {
+        List<Usuario> usuarioList = usuarioQueryService.getUserByEmail(email);
         return usuarioList;
     }
 
@@ -68,7 +72,7 @@ public class UserQueryController {
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody Usuario usuario) {
 
         try {
-            List<Usuario> usuarioList = usuarioQueryService.getUserByName(usuario.getName());
+            List<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
 
             if (usuarioList.isEmpty()) {
                 if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
@@ -76,10 +80,12 @@ public class UserQueryController {
                 }
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-                usuario.setCreated(LocalDateTime.now());
-                usuario.setLastLogin(LocalDateTime.now());
+                usuario.setCreated(JavaUtils.generateDate());
+                usuario.setLastLogin(JavaUtils.generateDate());
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
                 usuario.setActive(true);
+                usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
+//                usuario.setPhones(usuario.getPhones() == null || usuario.getPhones().isEmpty() ? usuario.getPhones() : new ArrayList<>());
                 Usuario _usuario = usuarioQueryService.save(usuario);
 
                 UserResponse userResponse = new UserResponse();

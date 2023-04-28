@@ -24,9 +24,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private LocalDateTime created;
+    private String created;
 
-    private LocalDateTime lastLogin;
+    private String lastLogin;
 
     private String token;
 

@@ -13,8 +13,8 @@ public class UsuarioQueryService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> getUserByName(String name) {
-        return usuarioRepository.findByNameContaining(name);
+    public List<Usuario> getUserByEmail(String email) {
+        return usuarioRepository.findByEmailContaining(email);
     }
 
     public List<Usuario> getUsers() {
