@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping(value = "/user")
 @Validated
 /**
  * Optional: Optional es una nueva clase en Java 1.8 que permite representar valores que pueden o no estar presentes
@@ -55,18 +53,6 @@ public class UserQueryController {
     @GetMapping("/users")
     public List<Usuario> getUsers() {
         return usuarioQueryService.getUsers();
-    }
-
-
-    @GetMapping("/users/{id}")
-    public ResponseEntity<Usuario> getUserById(@PathVariable UUID id) {
-        Optional<Usuario> userData = usuarioRepository.findById(id);
-
-        if (userData.isPresent()) {
-            return new ResponseEntity<>(userData.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @PostMapping("/sign-up")
