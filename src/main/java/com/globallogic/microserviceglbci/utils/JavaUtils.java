@@ -2,19 +2,21 @@ package com.globallogic.microserviceglbci.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Slf4j
 public class JavaUtils {
 
-    static String FORMAT_DATE = "MMM dd, yyyy hh:mm:ss aa";
+    static String FORMAT_DATE = "MMM dd, yyyy hh:mm:ss a";
 
-    public static String generateDate() {
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat(FORMAT_DATE);
-        String strDate = formatter.format(date);
-        return strDate;
+    public static String formattedDate() {
+
+        LocalDateTime today = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMAT_DATE);
+        String formattedDate = today.format(formatter);
+
+        return formattedDate;
     }
 
 }

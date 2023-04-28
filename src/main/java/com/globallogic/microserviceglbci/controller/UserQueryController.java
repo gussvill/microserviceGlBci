@@ -1,6 +1,5 @@
 package com.globallogic.microserviceglbci.controller;
 
-import com.globallogic.microserviceglbci.domain.entity.Phone;
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
@@ -17,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +24,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/user")
 @Validated
+/**
+ * Optional: Optional es una nueva clase en Java 1.8 que permite representar valores que pueden o no estar presentes
+ * Fecha y hora API: La API de fecha y hora proporciona clases para representar fechas, tiempos y períodos en Java 1.8.
+ */
 public class UserQueryController {
 
     private static final String INVALID_USER = "El usuario ingresado ya existe, favor ingresar un usuario diferente.";
@@ -46,8 +47,8 @@ public class UserQueryController {
     }
 
     @GetMapping("/{email}")
-    public List<Usuario> getUserByEmail(@PathVariable(value = "email") String email) {
-        List<Usuario> usuarioList = usuarioQueryService.getUserByEmail(email);
+    public Optional<Usuario> getUserByEmail(@PathVariable(value = "email") String email) {
+        Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(email);
         return usuarioList;
     }
 
@@ -72,16 +73,17 @@ public class UserQueryController {
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody Usuario usuario) {
 
         try {
-            List<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
 
-            if (usuarioList.isEmpty()) {
+            Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
+
+            if (!usuarioList.isPresent()) {
                 if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
                     throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD);
                 }
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-                usuario.setCreated(JavaUtils.generateDate());
-                usuario.setLastLogin(JavaUtils.generateDate());
+                usuario.setCreated(JavaUtils.formattedDate());
+                usuario.setLastLogin(JavaUtils.formattedDate());
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsuarioQueryService {
@@ -13,7 +14,7 @@ public class UsuarioQueryService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    public List<Usuario> getUserByEmail(String email) {
+    public Optional<Usuario> getUserByEmail(String email) {
         return usuarioRepository.findByEmailContaining(email);
     }
 
