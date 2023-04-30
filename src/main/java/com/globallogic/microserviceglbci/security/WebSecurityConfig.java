@@ -24,11 +24,6 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authManager) throws Exception {
 
-        JWTAuthenticationFilter jwtAuthenticationFilter = new JWTAuthenticationFilter();
-        jwtAuthenticationFilter.setAuthenticationManager(authManager);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-
-
         return http
                 .csrf().disable()
                 .authorizeRequests()
@@ -41,20 +36,9 @@ public class WebSecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilter(jwtAuthenticationFilter)
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
-//    @Bean
-//    UserDetailsService userDetailsService() {
-//        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-//        manager.createUser(User.withUsername("admin")
-//                .password(passwordEncoder().encode("admin"))
-//                .roles()
-//                .build());
-//        return manager;
-//    }
 
     @Bean
     AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {

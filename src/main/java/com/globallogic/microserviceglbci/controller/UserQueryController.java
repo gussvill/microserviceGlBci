@@ -7,6 +7,8 @@ import com.globallogic.microserviceglbci.response.UserResponse;
 import com.globallogic.microserviceglbci.security.TokenUtils;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
 import com.globallogic.microserviceglbci.utils.JavaUtils;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.JwtParser;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,7 @@ public class UserQueryController {
     private static final String INVALID_USER = "El usuario ingresado ya existe, favor ingresar un usuario diferente.";
     private static final String INVALID_DATA = "Revise los datos ingresados en el contrato.";
     private static final String INVALID_PASSWORD = "Contraseña inválida.";
+    private static final String INVALID_TOKEN = "Invalid or expired token";
 
     private final UsuarioQueryService usuarioQueryService;
 
@@ -40,19 +43,29 @@ public class UserQueryController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JwtParser jwtParser;
+
     public UserQueryController(UsuarioQueryService usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
-    }
-
-    @GetMapping("/{email}")
-    public Optional<Usuario> getUserByEmail(@PathVariable(value = "email") String email) {
-        Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(email);
-        return usuarioList;
     }
 
     @GetMapping("/users")
     public List<Usuario> getUsers() {
         return usuarioQueryService.getUsers();
+    }
+
+    @GetMapping("/login")
+    public Optional<Usuario> getUserByEmail(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+        Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
+        String token = authHeader.substring(7); // Remove "Bearer " prefix
+        try {
+            jwtParser.parseClaimsJws(token).getBody();
+            return usuarioList;
+        } catch (JwtException e) {
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_TOKEN);
+        }
+
     }
 
     @PostMapping("/sign-up")

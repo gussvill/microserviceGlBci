@@ -16,7 +16,7 @@ public class JavaUtils {
     }
 
     public static Date expirationDate() {
-        return new Date(new Date().getTime() + 30 * 1000);
+        return new Date(new Date().getTime() + 6000 * 1000);
     }
 
 }
