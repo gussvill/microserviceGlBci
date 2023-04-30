@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.function.Supplier;
 
 @Slf4j
 public class JavaUtils {
@@ -17,7 +16,7 @@ public class JavaUtils {
     }
 
     public static Date expirationDate() {
-        return new Date(new Date().getTime() + 20 * 1000);
+        return new Date(new Date().getTime() + 30 * 1000);
     }
 
 }
