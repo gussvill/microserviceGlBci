@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "3eb06364-730f-45e8-9b98-c2dcebcd3df5",
+		"name": "GlobalLogicBCI Microservicio Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1661805"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8081/sign-up",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"orlandovill@gmail.com\",\n    \"password\": \"Orland7878\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/sign-up",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvcmxhbmRvdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODI5MTAyODAsInBhc3N3b3JkIjoiJDJhJDEwJFJBS2ZURUxCQ1BWOVEyZG5EQThzUWU3UXlTa1B0TFF0MnpqMm9CTUw5d3psSC5weEIuY1oyIn0.QCioWqnbNpOHbtE8mHKZa1QzrIfO86owFlVI4_QkLnc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/login",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvcmxhbmRvdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODI5MDg1OTUsInBhc3N3b3JkIjoiJDJhJDEwJGNienlZMnpDNmw0eXpZaUpDMEVKdnU0Y2NpOXQ2NjBoR2g3bzc5UkkyUUdxTkxzaE9xL2NXIn0.7QE7QEnzC199PvUnZXNlak-P_zEJsEBl0xF8gEgfNtA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\" : \"orlandovill@gmail.com\",\n    \"password\": \"Orland7878\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

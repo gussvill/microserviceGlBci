@@ -5,9 +5,10 @@ spring:
     name: springboot-bci-microservice
   datasource:
     driverClassName: org.h2.Driver
-    password: h2
+    password: ENC(FGwqm3/7wOY28TSD2Vjb7Bl1rPaCo+Sy)
     url: 'jdbc:h2:mem:testdb'
-    username: h2
+    username: ENC(VKRXxsCv+63sEhTbwqVIEA==)
+    hikari: auto-commit=true
   h2:
     console:
       enabled: true
@@ -16,6 +17,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
+
+  mvc:
+    converters:
+      preferred-json-mapper: jackson
