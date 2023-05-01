@@ -80,8 +80,7 @@ public class UserQueryController {
 
                 return usuarioActualizado;
 
-            }
-            else {
+            } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS);
             }
 
