@@ -63,7 +63,7 @@ public class UserQueryController {
     }
 
     @GetMapping("/login")
-    public Usuario getUserByEmail(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+    public Usuario login(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
@@ -91,7 +91,7 @@ public class UserQueryController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody Usuario usuario) {
 
         try {
 
