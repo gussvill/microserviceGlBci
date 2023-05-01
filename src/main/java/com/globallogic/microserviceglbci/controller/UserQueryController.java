@@ -1,6 +1,8 @@
 package com.globallogic.microserviceglbci.controller;
 
+import com.globallogic.microserviceglbci.domain.entity.RevokedToken;
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
+import com.globallogic.microserviceglbci.domain.repository.RevokedTokenRepository;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
 import com.globallogic.microserviceglbci.response.UserResponse;
@@ -25,15 +27,17 @@ import java.util.Optional;
 @RestController
 @Validated
 /**
- * Optional: Optional es una nueva clase en Java 1.8 que permite representar valores que pueden o no estar presentes
- * Fecha y hora API: La API de fecha y hora proporciona clases para representar fechas, tiempos y períodos en Java 1.8.
+ * Optional: Optional is a new class in Java 1.8 that allows to represent values that may or may not be present.
+ * Date and Time API: The Date and Time API provides classes to represent dates, times and periods in Java 1.8.
  */
 public class UserQueryController {
 
-    private static final String INVALID_USER = "El usuario ingresado ya existe, favor ingresar un usuario diferente.";
-    private static final String INVALID_DATA = "Revise los datos ingresados en el contrato.";
-    private static final String INVALID_PASSWORD = "Contraseña inválida.";
+    private static final String INVALID_USER_EXISTS = "The entered user already exists, please enter a different user.";
+    private static final String INVALID_USER_NOT_EXISTS = "The entered user does not exist, please register a new user.";
+    private static final String INVALID_DATA = "Check the data entered in the contract.";
+    private static final String INVALID_PASSWORD = "Invalid password.";
     private static final String INVALID_TOKEN = "Invalid or expired token";
+    private static final String INVALID_LAST_LOGIN = "The user is not logged in yet. No Data!";
 
     private final UsuarioQueryService usuarioQueryService;
 
@@ -46,6 +50,9 @@ public class UserQueryController {
     @Autowired
     private JwtParser jwtParser;
 
+    @Autowired
+    private RevokedTokenRepository revokedTokenRepository;
+
     public UserQueryController(UsuarioQueryService usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
     }
@@ -56,12 +63,28 @@ public class UserQueryController {
     }
 
     @GetMapping("/login")
-    public Optional<Usuario> getUserByEmail(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
-        Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
+    public Usuario getUserByEmail(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+
         String token = authHeader.substring(7); // Remove "Bearer " prefix
+        Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
+
+
         try {
-            jwtParser.parseClaimsJws(token).getBody();
-            return usuarioList;
+            if (usuarioList.isPresent()) {
+                jwtParser.parseClaimsJws(token).getBody();
+                usuarioQueryService.updateLastLogin(usuario.getEmail(), JavaUtils.formattedDate());
+                revokedTokenRepository.save(new RevokedToken(token));
+                usuarioQueryService.updateToken(usuario.getEmail(), TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
+
+                Usuario usuarioActualizado = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
+
+                return usuarioActualizado;
+
+            }
+            else {
+                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS);
+            }
+
         } catch (JwtException e) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_TOKEN);
         }
@@ -82,7 +105,7 @@ public class UserQueryController {
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
                 usuario.setCreated(JavaUtils.formattedDate());
-                usuario.setLastLogin(JavaUtils.formattedDate());
+                usuario.setLastLogin(INVALID_LAST_LOGIN);
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
@@ -97,7 +120,7 @@ public class UserQueryController {
 
                 return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
             } else {
-                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER);
+                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_EXISTS);
             }
         } catch (Exception e) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_DATA);

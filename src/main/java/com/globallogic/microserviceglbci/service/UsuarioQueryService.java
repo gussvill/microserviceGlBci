@@ -18,15 +18,24 @@ public class UsuarioQueryService {
         return usuarioRepository.findByEmailContaining(email);
     }
 
+    public Usuario getUserByEmail(String email, String nullValue) {
+        return usuarioRepository.findByEmail(email);
+    }
+
     public List<Usuario> getUsers() {
         return usuarioRepository.findAll();
     }
 
-    public void deleteUsers() {
-        usuarioRepository.deleteAll();
-    }
-
     public Usuario save(Usuario usuario) {
         return usuarioRepository.save(usuario);
+    }
+
+
+    public void updateToken(String email, String newToken) {
+        usuarioRepository.updateToken(email, newToken);
+    }
+
+    public void updateLastLogin(String email, String date) {
+        usuarioRepository.updateLastLogin(email, date);
     }
 }
