@@ -72,15 +72,18 @@ public class UserQueryController {
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
 
-
         try {
             if (usuarioList.isPresent()) {
                 jwtParser.parseClaimsJws(token).getBody();
                 usuarioQueryService.updateLastLogin(usuario.getEmail(), myAppProperties.getFormatDate());
                 revokedTokenRepository.save(new RevokedToken(token));
-                usuarioQueryService.updateToken(usuario.getEmail(), TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
 
-                return usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
+                Usuario updatedUser = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
+                String newToken = TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs());
+                usuarioQueryService.updateToken(usuario.getEmail(), newToken);
+                updatedUser.setToken(newToken);
+
+                return updatedUser;
 
             } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS);
