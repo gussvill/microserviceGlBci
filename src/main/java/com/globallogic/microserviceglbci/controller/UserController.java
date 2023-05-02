@@ -32,7 +32,7 @@ import java.util.Optional;
  * Optional: Optional is a new class in Java 1.8 that allows to represent values that may or may not be present.
  * Date and Time API: The Date and Time API provides classes to represent dates, times and periods in Java 1.8.
  */
-public class UserQueryController {
+public class UserController {
 
     private static final String INVALID_USER_EXISTS = "The entered user already exists, please enter a different user.";
     private static final String INVALID_USER_NOT_EXISTS = "The entered user does not exist, please register a new user.";
@@ -58,13 +58,13 @@ public class UserQueryController {
     @Autowired
     private MyAppProperties myAppProperties;
 
-    public UserQueryController(UsuarioQueryService usuarioQueryService) {
+    public UserController(UsuarioQueryService usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
     }
 
     @GetMapping("/users")
     public List<Usuario> getUsers() {
-        return usuarioQueryService.getUsers();
+        return usuarioRepository.findAll();
     }
 
     @GetMapping("/login")
