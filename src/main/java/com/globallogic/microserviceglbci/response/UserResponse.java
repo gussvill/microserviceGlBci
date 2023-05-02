@@ -1,6 +1,5 @@
 package com.globallogic.microserviceglbci.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
