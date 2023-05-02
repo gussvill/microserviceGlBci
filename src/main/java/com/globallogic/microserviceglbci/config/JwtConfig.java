@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JwtConfig {
 
-    private final static String ACCESS_TOKEN_SECRET = "5e05050c0acc4df6be982f5d41ff18da";
+    private static final String ACCESS_TOKEN_SECRET = "5e05050c0acc4df6be982f5d41ff18da";
 
     @Bean
     public JwtParser jwtParser() {

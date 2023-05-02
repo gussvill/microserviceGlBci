@@ -1,6 +1,6 @@
 package com.globallogic.microserviceglbci.security;
 
-import com.globallogic.microserviceglbci.utils.JavaUtils;
+import com.globallogic.microserviceglbci.utils.DateUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,16 +13,16 @@ import java.util.Map;
 
 public class TokenUtils {
 
-    private final static String ACCESS_TOKEN_SECRET = "5e05050c0acc4df6be982f5d41ff18da";
+    private static final String ACCESS_TOKEN_SECRET = "5e05050c0acc4df6be982f5d41ff18da";
 
-    public static String createToken(String email, String password) {
+    public static String createToken(String email, String password, int expirationTokenMs) {
 
         Map<String, Object> extra = new HashMap<>();
         extra.put("password", password);
 
         return Jwts.builder()
                 .setSubject(email)
-                .setExpiration(JavaUtils.expirationDate())
+                .setExpiration(DateUtils.expirationDate(expirationTokenMs))
                 .addClaims(extra)
                 .signWith(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
                 .compact();

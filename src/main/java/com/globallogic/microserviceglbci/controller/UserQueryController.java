@@ -8,7 +8,8 @@ import com.globallogic.microserviceglbci.exceptions.InputValidationException;
 import com.globallogic.microserviceglbci.response.UserResponse;
 import com.globallogic.microserviceglbci.security.TokenUtils;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
-import com.globallogic.microserviceglbci.utils.JavaUtils;
+import com.globallogic.microserviceglbci.utils.DateUtils;
+import com.globallogic.microserviceglbci.utils.MyAppProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,9 @@ public class UserQueryController {
     @Autowired
     private RevokedTokenRepository revokedTokenRepository;
 
+    @Autowired
+    private MyAppProperties myAppProperties;
+
     public UserQueryController(UsuarioQueryService usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
     }
@@ -68,17 +72,18 @@ public class UserQueryController {
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
 
-
         try {
             if (usuarioList.isPresent()) {
                 jwtParser.parseClaimsJws(token).getBody();
-                usuarioQueryService.updateLastLogin(usuario.getEmail(), JavaUtils.formattedDate());
+                usuarioQueryService.updateLastLogin(usuario.getEmail(), myAppProperties.getFormatDate());
                 revokedTokenRepository.save(new RevokedToken(token));
-                usuarioQueryService.updateToken(usuario.getEmail(), TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
 
-                Usuario usuarioActualizado = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
+                Usuario updatedUser = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
+                String newToken = TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs());
+                usuarioQueryService.updateToken(usuario.getEmail(), newToken);
+                updatedUser.setToken(newToken);
 
-                return usuarioActualizado;
+                return updatedUser;
 
             } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS);
@@ -103,19 +108,19 @@ public class UserQueryController {
                 }
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-                usuario.setCreated(JavaUtils.formattedDate());
+                usuario.setCreated(DateUtils.formattedDate(myAppProperties.getFormatDate()));
                 usuario.setLastLogin(INVALID_LAST_LOGIN);
-                usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword()));
+                usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
-                Usuario _usuario = usuarioQueryService.save(usuario);
+                Usuario usuarioSave = usuarioQueryService.save(usuario);
 
                 UserResponse userResponse = new UserResponse();
-                userResponse.setId(_usuario.getId());
-                userResponse.setCreated(_usuario.getCreated());
-                userResponse.setLastLogin(_usuario.getLastLogin());
-                userResponse.setToken(_usuario.getToken());
-                userResponse.setActive(_usuario.isActive());
+                userResponse.setId(usuarioSave.getId());
+                userResponse.setCreated(usuarioSave.getCreated());
+                userResponse.setLastLogin(usuarioSave.getLastLogin());
+                userResponse.setToken(usuarioSave.getToken());
+                userResponse.setActive(usuarioSave.isActive());
 
                 return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
             } else {

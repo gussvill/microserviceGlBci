@@ -30,7 +30,6 @@ public class UsuarioQueryService {
         return usuarioRepository.save(usuario);
     }
 
-
     public void updateToken(String email, String newToken) {
         usuarioRepository.updateToken(email, newToken);
     }
