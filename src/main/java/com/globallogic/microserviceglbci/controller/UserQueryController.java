@@ -5,7 +5,8 @@ import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import com.globallogic.microserviceglbci.domain.repository.RevokedTokenRepository;
 import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
-import com.globallogic.microserviceglbci.response.UserResponse;
+import com.globallogic.microserviceglbci.response.UsuarioSignUpResponse;
+import com.globallogic.microserviceglbci.response.UsuariosResponse;
 import com.globallogic.microserviceglbci.security.TokenUtils;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
 import com.globallogic.microserviceglbci.utils.DateUtils;
@@ -67,7 +68,7 @@ public class UserQueryController {
     }
 
     @GetMapping("/login")
-    public Usuario login(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuariosResponse> login(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
@@ -75,7 +76,7 @@ public class UserQueryController {
         try {
             if (usuarioList.isPresent()) {
                 jwtParser.parseClaimsJws(token).getBody();
-                usuarioQueryService.updateLastLogin(usuario.getEmail(), myAppProperties.getFormatDate());
+                usuarioQueryService.updateLastLogin(usuario.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
                 revokedTokenRepository.save(new RevokedToken(token));
 
                 Usuario updatedUser = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
@@ -83,7 +84,18 @@ public class UserQueryController {
                 usuarioQueryService.updateToken(usuario.getEmail(), newToken);
                 updatedUser.setToken(newToken);
 
-                return updatedUser;
+                UsuariosResponse usuariosResponse = new UsuariosResponse();
+                usuariosResponse.setId(updatedUser.getId());
+                usuariosResponse.setCreated(updatedUser.getCreated());
+                usuariosResponse.setLastLogin(updatedUser.getLastLogin());
+                usuariosResponse.setToken(updatedUser.getToken());
+                usuariosResponse.setActive(updatedUser.isActive());
+                usuariosResponse.setName(updatedUser.getName());
+                usuariosResponse.setEmail(updatedUser.getEmail());
+                usuariosResponse.setPassword(updatedUser.getPassword());
+                usuariosResponse.setPhones(updatedUser.getPhones());
+
+                return new ResponseEntity<>(usuariosResponse, HttpStatus.ACCEPTED);
 
             } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS);
@@ -96,7 +108,7 @@ public class UserQueryController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
 
         try {
 
@@ -113,16 +125,17 @@ public class UserQueryController {
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
+                usuario.setPhones(usuario.getPhones());
                 Usuario usuarioSave = usuarioQueryService.save(usuario);
 
-                UserResponse userResponse = new UserResponse();
-                userResponse.setId(usuarioSave.getId());
-                userResponse.setCreated(usuarioSave.getCreated());
-                userResponse.setLastLogin(usuarioSave.getLastLogin());
-                userResponse.setToken(usuarioSave.getToken());
-                userResponse.setActive(usuarioSave.isActive());
+                UsuarioSignUpResponse usuarioSignUpResponse = new UsuarioSignUpResponse();
+                usuarioSignUpResponse.setId(usuarioSave.getId());
+                usuarioSignUpResponse.setCreated(usuarioSave.getCreated());
+                usuarioSignUpResponse.setLastLogin(usuarioSave.getLastLogin());
+                usuarioSignUpResponse.setToken(usuarioSave.getToken());
+                usuarioSignUpResponse.setActive(usuarioSave.isActive());
 
-                return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+                return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
             } else {
                 throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_EXISTS);
             }
