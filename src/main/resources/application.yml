@@ -13,6 +13,10 @@ spring:
       connectionTimeout: 120000
       maximumPoolSize: 5
       minimumIdle: 2
+
+  devtools:
+    restart:
+      enabled: true
   h2:
     console:
       enabled: true

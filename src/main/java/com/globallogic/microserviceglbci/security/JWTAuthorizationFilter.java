@@ -1,7 +1,7 @@
 package com.globallogic.microserviceglbci.security;
 
 import com.globallogic.microserviceglbci.domain.repository.RevokedTokenRepository;
-import com.globallogic.microserviceglbci.exceptions.CustomException;
+import com.globallogic.microserviceglbci.exceptions.CustomValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,11 +37,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
                 String tokenB = request.getHeader("Authorization").substring(7);
                 if (revokedTokenRepository.existsByToken(tokenB)) {
-                    throw new CustomException("Token has been revoked", "{\"error\": \"Token has been revoked\"}");
+                    throw new CustomValidationException("Token has been revoked", "{\"error\": \"Token has been revoked\"}");
                 }
 
             }
-        } catch (CustomException e) {
+        } catch (CustomValidationException e) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.setContentType("application/json");
             response.getWriter().write(e.getMessage());
