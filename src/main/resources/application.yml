@@ -10,7 +10,7 @@ spring:
     username: ENC(VKRXxsCv+63sEhTbwqVIEA==)
     hikari:
       auto-commit: true
-      connectionTimeout: 60000
+      connectionTimeout: 120000
       maximumPoolSize: 5
       minimumIdle: 2
   h2:
@@ -32,4 +32,4 @@ spring:
 
 myapp:
   formatDate: "MMM dd, yyyy hh:mm:ss a"
-  expirationTokenMs: 30000
+  expirationTokenMs: 60000
