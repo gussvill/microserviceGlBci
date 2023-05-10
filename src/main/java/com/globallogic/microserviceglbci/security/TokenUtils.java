@@ -59,7 +59,6 @@ public class TokenUtils {
 }
 
 /*
-    La clase `TokenUtils` proporciona métodos para crear y validar tokens de autenticación JWT (JSON Web Tokens). Estos tokens se utilizan para autenticar y autorizar a los usuarios en una aplicación web.
 
     El método `createToken` toma como entrada el correo electrónico del usuario, su contraseña y la duración de expiración del token en milisegundos.
     Luego, genera un token JWT con los datos proporcionados utilizando la biblioteca JJWT. El token incluye el correo electrónico del usuario como "subject" y la fecha de expiración del token.
