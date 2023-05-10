@@ -51,3 +51,14 @@ public class Phone {
         this.countryCode = countryCode;
     }
 }
+
+/*
+    La anotación `@Entity` indica que la clase `Phone` es una entidad de base de datos que puede ser mapeada a una tabla en una base de datos relacional. En otras palabras,
+    `@Entity` es una anotación de Hibernate que se utiliza para indicar que la clase debe ser persistida en la base de datos.
+
+    Los campos de la clase `Phone` (como `id`, `number`, `cityCode`, `countryCode`) corresponden a columnas en la tabla de base de datos que representa la entidad `Phone`.
+    Las anotaciones `@Id` y `@GeneratedValue` se utilizan para indicar que el campo `id` es la clave principal de la tabla y que se genera automáticamente un valor para la clave principal, respectivamente.
+
+    Además, los métodos `getId()`, `setId()`, `getNumber()`, `setNumber()`, `getCityCode()`, `setCityCode()`, `getCountryCode()`, y `setCountryCode()`
+    son métodos de acceso (getters y setters) que se utilizan para acceder a los campos de la entidad `Phone`.
+ */

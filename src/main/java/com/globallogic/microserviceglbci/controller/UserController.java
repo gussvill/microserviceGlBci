@@ -9,6 +9,7 @@ import com.globallogic.microserviceglbci.response.UsuarioSignUpResponse;
 import com.globallogic.microserviceglbci.response.UsuariosResponse;
 import com.globallogic.microserviceglbci.security.TokenUtils;
 import com.globallogic.microserviceglbci.service.UsuarioQueryService;
+import com.globallogic.microserviceglbci.service.UsuarioQueryServiceImpl;
 import com.globallogic.microserviceglbci.utils.DateUtils;
 import com.globallogic.microserviceglbci.utils.MyAppProperties;
 import io.jsonwebtoken.JwtException;
@@ -58,7 +59,7 @@ public class UserController {
     @Autowired
     private MyAppProperties myAppProperties;
 
-    public UserController(UsuarioQueryService usuarioQueryService) {
+    public UserController(UsuarioQueryServiceImpl usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
     }
 
@@ -146,3 +147,25 @@ public class UserController {
     }
 
 }
+
+/*
+Este es un controlador de Spring que maneja solicitudes HTTP relacionadas con usuarios en una aplicación web. Veamos algunas de las anotaciones y métodos utilizados en el controlador:
+
+- `@CrossOrigin(origins = "http://localhost:8081")`: permite solicitudes HTTP de origen cruzado (CORS) desde el origen especificado (en este caso, http://localhost:8081).
+- `@RestController`: indica que esta clase es un controlador de Spring que maneja solicitudes HTTP y devuelve objetos JSON.
+- `@Validated`: se utiliza para validar los objetos de entrada de las solicitudes HTTP.
+- `@GetMapping("/users")`: mapea la solicitud GET a la ruta "/users" y devuelve una lista de usuarios.
+- `@GetMapping("/login")`: mapea la solicitud GET a la ruta "/login" y maneja el inicio de sesión del usuario.
+- `@PostMapping("/sign-up")`: mapea la solicitud POST a la ruta "/sign-up" y maneja el registro de un nuevo usuario.
+- `@Autowired`: se utiliza para inyectar dependencias de Spring en la clase (por ejemplo, `UsuarioRepository`, `PasswordEncoder`, etc.).
+- `UsuarioQueryServiceImpl`: es una implementación de servicio que se utiliza para realizar consultas de usuario en la base de datos.
+- `UsuarioRepository`: es una interfaz que se utiliza para acceder a la base de datos de usuarios.
+- `JwtParser`: se utiliza para analizar y validar tokens JWT (JSON Web Token).
+- `RevokedTokenRepository`: es una interfaz que se utiliza para acceder a la base de datos de tokens revocados.
+- `MyAppProperties`: es una clase que contiene propiedades de configuración de la aplicación (por ejemplo, formato de fecha, tiempo de expiración del token, etc.).
+- `Usuario`: es una clase de modelo que representa a un usuario en la aplicación.
+- `UsuariosResponse`: es una clase que se utiliza para devolver información sobre el usuario (por ejemplo, id, nombre, token, etc.) después del inicio de sesión.
+- `UsuarioSignUpResponse`: es una clase que se utiliza para devolver información sobre el usuario (por ejemplo, id, fecha de creación, token, etc.) después del registro.
+
+En resumen, este controlador maneja solicitudes HTTP relacionadas con el inicio de sesión y el registro de usuarios en una aplicación web utilizando Spring.
+ */

@@ -1,9 +1,9 @@
 server:
-  port: 8081
+  port: 8081 #especifica el número de puerto en el que la aplicación se ejecutará.
 spring:
   application:
-    name: springboot-bci-microservice
-  datasource:
+    name: springboot-bci-microservice #  establece el nombre de la aplicación.
+  datasource: #  configura las propiedades para la conexión de la base de datos H2, incluyendo el controlador de la base de datos, la URL, el nombre de usuario y la contraseña encriptados utilizando Jasypt.
     driverClassName: org.h2.Driver
     password: ENC(FGwqm3/7wOY28TSD2Vjb7Bl1rPaCo+Sy)
     url: 'jdbc:h2:mem:testdb'
@@ -13,23 +13,23 @@ spring:
       connectionTimeout: 120000
       maximumPoolSize: 5
       minimumIdle: 2
-  h2:
+  h2: # habilita la consola de la base de datos H2
     console:
       enabled: true
       path: /h2-console
-  jpa:
+  jpa: #  configura las propiedades para la conexión JPA, incluyendo la plataforma de la base de datos y la configuración de Hibernate
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         show_sql: true
     hibernate:
       ddl-auto: update
-  mvc:
+  mvc: #  configura la conversión y el formateo de objetos JSON en la aplicación
     converters:
       preferred-json-mapper: jackson
     format:
       date: "MMM dd, yyyy hh:mm:ss a"
 
-myapp:
+myapp: # configura las propiedades de la aplicación, incluyendo el formato de fecha y el tiempo de expiración del token
   formatDate: "MMM dd, yyyy hh:mm:ss a"
   expirationTokenMs: 60000

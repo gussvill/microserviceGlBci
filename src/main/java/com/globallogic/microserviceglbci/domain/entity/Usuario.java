@@ -115,3 +115,23 @@ public class Usuario {
         this.phones = phones;
     }
 }
+
+/*
+    La anotación `@Entity` se utiliza en Java para indicar que una clase es una entidad que se puede almacenar en una base de datos relacional.
+    En el contexto de la programación de aplicaciones web, una entidad representa un objeto de negocio que se puede guardar, actualizar o eliminar en la base de datos.
+
+    La clase `Usuario` es una entidad que representa a un usuario en la aplicación. Tiene varias propiedades que representan los datos del usuario, como `id`, `created`, `lastLogin`, `token`, `isActive`, `name`, `email`, `password`
+     y `phones`.
+
+    La propiedad `id` se utiliza como identificador único del usuario en la base de datos. La propiedad `created` representa la fecha y hora en que se creó el usuario en la base de datos. La propiedad `lastLogin`
+    representa la fecha y hora en que el usuario inició sesión por última vez en la aplicación. La propiedad `token` representa el token de autenticación del usuario en la aplicación. La propiedad `isActive`
+    es un indicador booleano que indica si el usuario está activo o no en la aplicación. La propiedad `name` representa el nombre del usuario. La propiedad `email` representa la dirección de correo electrónico del usuario.
+    La propiedad `password` representa la contraseña del usuario. Finalmente, la propiedad `phones` es una lista de objetos `Phone` que representa los números de teléfono asociados con el usuario.
+
+    La clase `Usuario` también tiene varios métodos getters y setters para acceder y modificar los valores de sus propiedades. También tiene dos constructores: uno sin argumentos y
+    otro que toma como argumentos una cadena de texto `email` y una cadena de texto `password`. Además, la clase tiene la anotación `@Id`, que indica que la propiedad `id` es el identificador único de la entidad en la base de datos,
+    y la anotación `@GeneratedValue`, que especifica cómo se generará el valor de la propiedad `id`.
+
+    En resumen, la clase `Usuario` es una entidad que representa a un usuario en la aplicación. Utiliza la anotación `@Entity` para indicar que es una entidad de base de datos,
+    y tiene varias propiedades que representan los datos del usuario. También tiene métodos getters y setters para acceder y modificar los valores de sus propiedades, y constructores para crear instancias de la clase.
+ */
