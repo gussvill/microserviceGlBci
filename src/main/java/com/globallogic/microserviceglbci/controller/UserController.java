@@ -2,13 +2,13 @@ package com.globallogic.microserviceglbci.controller;
 
 import com.globallogic.microserviceglbci.domain.entity.RevokedToken;
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
-import com.globallogic.microserviceglbci.domain.repository.RevokedTokenRepository;
-import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
+import com.globallogic.microserviceglbci.domain.repository.IRevokedTokenRepository;
+import com.globallogic.microserviceglbci.domain.repository.IUsuarioRepository;
 import com.globallogic.microserviceglbci.exceptions.InputValidationException;
 import com.globallogic.microserviceglbci.response.UsuarioSignUpResponse;
 import com.globallogic.microserviceglbci.response.UsuariosResponse;
 import com.globallogic.microserviceglbci.security.TokenUtils;
-import com.globallogic.microserviceglbci.service.UsuarioQueryService;
+import com.globallogic.microserviceglbci.service.IUsuarioQueryService;
 import com.globallogic.microserviceglbci.service.UsuarioQueryServiceImpl;
 import com.globallogic.microserviceglbci.utils.DateUtils;
 import com.globallogic.microserviceglbci.utils.MyAppProperties;
@@ -42,10 +42,10 @@ public class UserController {
     private static final String INVALID_TOKEN = "Invalid or expired token";
     private static final String INVALID_LAST_LOGIN = "The user is not logged in yet. No Data!";
 
-    private final UsuarioQueryService usuarioQueryService;
+    private final IUsuarioQueryService usuarioQueryService;
 
     @Autowired
-    UsuarioRepository usuarioRepository;
+    IUsuarioRepository IUsuarioRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -54,7 +54,7 @@ public class UserController {
     private JwtParser jwtParser;
 
     @Autowired
-    private RevokedTokenRepository revokedTokenRepository;
+    private IRevokedTokenRepository IRevokedTokenRepository;
 
     @Autowired
     private MyAppProperties myAppProperties;
@@ -65,7 +65,7 @@ public class UserController {
 
     @GetMapping("/users")
     public List<Usuario> getUsers() {
-        return usuarioRepository.findAll();
+        return IUsuarioRepository.findAll();
     }
 
     @GetMapping("/login")
@@ -78,7 +78,7 @@ public class UserController {
             if (usuarioList.isPresent()) {
                 jwtParser.parseClaimsJws(token).getBody();
                 usuarioQueryService.updateLastLogin(usuario.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
-                revokedTokenRepository.save(new RevokedToken(token));
+                IRevokedTokenRepository.save(new RevokedToken(token));
 
                 Usuario updatedUser = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
                 String newToken = TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs());

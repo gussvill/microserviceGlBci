@@ -5,7 +5,7 @@ import com.globallogic.microserviceglbci.domain.entity.Usuario;
 import java.util.List;
 import java.util.Optional;
 // define el contrato que deben cumplir las implementacion.
-public interface UsuarioQueryService {
+public interface IUsuarioQueryService {
     Optional<Usuario> getUserByEmail(String email);
 
     Usuario getUserByEmail(String email, String nullValue);

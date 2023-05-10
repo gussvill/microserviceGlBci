@@ -1,7 +1,7 @@
 package com.globallogic.microserviceglbci;
 
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
-import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
+import com.globallogic.microserviceglbci.domain.repository.IUsuarioRepository;
 import com.globallogic.microserviceglbci.service.UsuarioQueryServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class UsuarioServiceTest {
     private UsuarioQueryServiceImpl usuarioQueryServiceImpl;
 
     @MockBean
-    private UsuarioRepository usuarioRepository;
+    private IUsuarioRepository IUsuarioRepository;
 
     @Test
     public void testGetUserByEmailOptional() {
@@ -44,13 +44,13 @@ public class UsuarioServiceTest {
         List<Usuario> usuarios = Arrays.asList(usuario1, usuario2);
 
         // Establecer el comportamiento esperado del mock
-        when(usuarioRepository.findByEmailContaining("test"))
+        when(IUsuarioRepository.findByEmailContaining("test"))
                 .thenReturn(Optional.of(usuario1));
-        when(usuarioRepository.findByEmailContaining("no-existe"))
+        when(IUsuarioRepository.findByEmailContaining("no-existe"))
                 .thenReturn(Optional.empty());
-        when(usuarioRepository.findByEmailContaining(""))
+        when(IUsuarioRepository.findByEmailContaining(""))
                 .thenReturn(Optional.ofNullable(null));
-        when(usuarioRepository.findByEmailContaining("multiple"))
+        when(IUsuarioRepository.findByEmailContaining("multiple"))
                 .thenReturn(Optional.of(usuario1))
                 .thenReturn(Optional.of(usuario2));
 
@@ -70,7 +70,7 @@ public class UsuarioServiceTest {
         expectedUsuario.setEmail(email);
 
         // Configurar el comportamiento del mock
-        Mockito.when(usuarioRepository.findByEmail(email)).thenReturn(expectedUsuario);
+        Mockito.when(IUsuarioRepository.findByEmail(email)).thenReturn(expectedUsuario);
 
         // Invocar al método a probar
         Usuario actualUsuario = usuarioQueryServiceImpl.getUserByEmail(email, null);
@@ -94,14 +94,14 @@ public class UsuarioServiceTest {
 
         // Given
         List<Usuario> expectedUsuarios = Arrays.asList(usuario, usuario2);
-        when(usuarioRepository.findAll()).thenReturn(expectedUsuarios);
+        when(IUsuarioRepository.findAll()).thenReturn(expectedUsuarios);
 
         // When
         List<Usuario> actualUsuarios = usuarioQueryServiceImpl.getUsers();
 
         // Then
         assertEquals(expectedUsuarios, actualUsuarios);
-        verify(usuarioRepository).findAll();
+        verify(IUsuarioRepository).findAll();
     }
 
 
@@ -113,11 +113,11 @@ public class UsuarioServiceTest {
         usuario.setPassword("Guss2023");
 
         // define el comportamiento del repositorio
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
+        when(IUsuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
 
         // llama al método del servicio y verifica el resultado
         Usuario result = usuarioQueryServiceImpl.save(usuario);
-        verify(usuarioRepository, times(1)).save(usuario);
+        verify(IUsuarioRepository, times(1)).save(usuario);
         assertEquals(usuario, result);
     }
 
@@ -131,7 +131,7 @@ public class UsuarioServiceTest {
         usuarioQueryServiceImpl.updateToken(email, newToken);
 
         // verifica si el método del repositorio se llamó una vez con los parámetros adecuados
-        verify(usuarioRepository, times(1)).updateToken(email, newToken);
+        verify(IUsuarioRepository, times(1)).updateToken(email, newToken);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class UsuarioServiceTest {
         usuarioQueryServiceImpl.updateLastLogin(email, date);
 
         // Then
-        verify(usuarioRepository).updateLastLogin(email, date);
+        verify(IUsuarioRepository).updateLastLogin(email, date);
     }
 
 

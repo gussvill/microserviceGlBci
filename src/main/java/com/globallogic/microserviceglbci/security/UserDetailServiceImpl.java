@@ -1,7 +1,7 @@
 package com.globallogic.microserviceglbci.security;
 
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
-import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
+import com.globallogic.microserviceglbci.domain.repository.IUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class UserDetailServiceImpl implements UserDetailsService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private IUsuarioRepository IUsuarioRepository;
 
     /*
          Si se encuentra el usuario, se crea un nuevo objeto UserDetailsImpl que implementa la interfaz UserDetails de Spring Security,
@@ -24,7 +24,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository
+        Usuario usuario = IUsuarioRepository
                 .findOneByName(name)
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario con userName " + name + " no existe."));
 

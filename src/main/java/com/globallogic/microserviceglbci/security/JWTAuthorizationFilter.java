@@ -1,6 +1,6 @@
 package com.globallogic.microserviceglbci.security;
 
-import com.globallogic.microserviceglbci.domain.repository.RevokedTokenRepository;
+import com.globallogic.microserviceglbci.domain.repository.IRevokedTokenRepository;
 import com.globallogic.microserviceglbci.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private RevokedTokenRepository revokedTokenRepository;
+    private IRevokedTokenRepository IRevokedTokenRepository;
 
     /*
     El filtro intercepta cada solicitud y realiza las siguientes acciones:
@@ -50,7 +50,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePAT);
 
                 String tokenB = request.getHeader("Authorization").substring(7);
-                if (revokedTokenRepository.existsByToken(tokenB)) {
+                if (IRevokedTokenRepository.existsByToken(tokenB)) {
                     throw new CustomException("Token has been revoked", "{\"error\": \"Token has been revoked\"}");
                 }
 

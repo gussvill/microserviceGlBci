@@ -1,7 +1,7 @@
 package com.globallogic.microserviceglbci.service;
 
 import com.globallogic.microserviceglbci.domain.entity.Usuario;
-import com.globallogic.microserviceglbci.domain.repository.UsuarioRepository;
+import com.globallogic.microserviceglbci.domain.repository.IUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,39 +10,39 @@ import java.util.Optional;
 
 // esta implementación se encarga de proporcionar una capa de abstracción para acceder a los datos de usuario en la base de datos, y ofrece una interfaz simple y coherente para hacerlo.
 @Service
-public class UsuarioQueryServiceImpl implements UsuarioQueryService {
+public class UsuarioQueryServiceImpl implements IUsuarioQueryService {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private IUsuarioRepository IUsuarioRepository;
 
     @Override
     public Optional<Usuario> getUserByEmail(String email) {
-        return usuarioRepository.findByEmailContaining(email);
+        return IUsuarioRepository.findByEmailContaining(email);
     }
 
     @Override
     public Usuario getUserByEmail(String email, String nullValue) {
-        return usuarioRepository.findByEmail(email);
+        return IUsuarioRepository.findByEmail(email);
     }
 
     @Override
     public List<Usuario> getUsers() {
-        return usuarioRepository.findAll();
+        return IUsuarioRepository.findAll();
     }
 
     @Override
     public Usuario save(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        return IUsuarioRepository.save(usuario);
     }
 
     @Override
     public void updateToken(String email, String newToken) {
-        usuarioRepository.updateToken(email, newToken);
+        IUsuarioRepository.updateToken(email, newToken);
     }
 
     @Override
     public void updateLastLogin(String email, String date) {
-        usuarioRepository.updateLastLogin(email, date);
+        IUsuarioRepository.updateLastLogin(email, date);
     }
 }
 
