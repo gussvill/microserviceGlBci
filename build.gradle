@@ -1,14 +1,14 @@
 //lista de plugins que se aplicaran al proyecto.
 plugins {
-    id 'idea' // Este plugin se utiliza para generar los archivos de configuración del proyecto para el entorno de desarrollo IntelliJ IDEA.
-    id 'java' // Este plugin es necesario para compilar, empaquetar y ejecutar proyectos de Java.
-    id 'groovy' // Este plugin se utiliza para compilar, empaquetar y ejecutar proyectos de Groovy.
-    id 'org.springframework.boot' version '2.7.11' // Este plugin se utiliza para construir y empaquetar aplicaciones Spring Boot.
-    id 'io.spring.dependency-management' version '1.1.0' // Este plugin se utiliza para manejar las dependencias de las bibliotecas y frameworks de Spring en el proyecto.
+    id 'idea'
+    id 'java'
+    id 'groovy'
+    id 'org.springframework.boot' version '2.7.11'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
-group = 'com.globallogic' // establece el nombre del grupo del proyecto. El nombre del grupo es una convención para organizar los proyectos en un entorno de desarrollo empresarial.
-version = '1.0.0' //  establece la versión del proyecto
+group = 'com.globallogic'
+version = '1.0.0'
 sourceCompatibility = JavaVersion.VERSION_1_8 // establece la versión del compilador de Java que se usará para compilar el código fuente
 targetCompatibility = JavaVersion.VERSION_1_8 // establece la versión de Java a la que se dirigirá la compilación
 
@@ -44,6 +44,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2' // dependencias para JUnit y AssertJ, que proporcionan herramientas para escribir pruebas unitarias en aplicaciones de Java.
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.mockito:mockito-core:4.11.0' // dependencia para la biblioteca Mockito, que proporciona herramientas para escribir pruebas de unidad con objetos simulados en aplicaciones de Java.
+    implementation group: 'javax.interceptor', name: 'javax.interceptor-api', version: '1.2.2'
 }
 // este bloque de código configura la tarea de prueba del proyecto para utilizar la plataforma JUnit 5.
 tasks.named('test') {

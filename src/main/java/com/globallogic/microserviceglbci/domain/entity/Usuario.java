@@ -6,6 +6,9 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * La clase `Usuario` es una entidad que representa a un usuario en la aplicación.
+ */
 @Entity
 public class Usuario {
     @Id
@@ -34,104 +37,183 @@ public class Usuario {
     @JoinColumn(name = "usuario_id")
     private List<Phone> phones;
 
+    /**
+     * Instantiates a new Usuario.
+     *
+     * @param email    the email
+     * @param password the password
+     */
     public Usuario(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
+    /**
+     * Instantiates a new Usuario.
+     */
     public Usuario() {
 
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public UUID getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(UUID id) {
         this.id = id;
     }
 
+    /**
+     * Gets created.
+     *
+     * @return the created
+     */
     public String getCreated() {
         return created;
     }
 
+    /**
+     * Sets created.
+     *
+     * @param created the created
+     */
     public void setCreated(String created) {
         this.created = created;
     }
 
+    /**
+     * Gets last login.
+     *
+     * @return the last login
+     */
     public String getLastLogin() {
         return lastLogin;
     }
 
+    /**
+     * Sets last login.
+     *
+     * @param lastLogin the last login
+     */
     public void setLastLogin(String lastLogin) {
         this.lastLogin = lastLogin;
     }
 
+    /**
+     * Gets token.
+     *
+     * @return the token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * Sets token.
+     *
+     * @param token the token
+     */
     public void setToken(String token) {
         this.token = token;
     }
 
+    /**
+     * Is active boolean.
+     *
+     * @return the boolean
+     */
     public boolean isActive() {
         return isActive;
     }
 
+    /**
+     * Sets active.
+     *
+     * @param active the active
+     */
     public void setActive(boolean active) {
         isActive = active;
     }
 
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets email.
+     *
+     * @return the email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Sets email.
+     *
+     * @param email the email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Gets password.
+     *
+     * @return the password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * Sets password.
+     *
+     * @param password the password
+     */
     public void setPassword(String password) {
         this.password = password;
     }
 
+    /**
+     * Gets phones.
+     *
+     * @return the phones
+     */
     public List<Phone> getPhones() {
         return phones;
     }
 
+    /**
+     * Sets phones.
+     *
+     * @param phones the phones
+     */
     public void setPhones(List<Phone> phones) {
         this.phones = phones;
     }
 }
-
-/*
-    La anotación `@Entity` se utiliza en Java para indicar que una clase es una entidad que se puede almacenar en una base de datos relacional.
-    En el contexto de la programación de aplicaciones web, una entidad representa un objeto de negocio que se puede guardar, actualizar o eliminar en la base de datos.
-
-    La clase `Usuario` es una entidad que representa a un usuario en la aplicación. Tiene varias propiedades que representan los datos del usuario, como `id`, `created`, `lastLogin`, `token`, `isActive`, `name`, `email`, `password`
-     y `phones`.
-
-    La propiedad `id` se utiliza como identificador único del usuario en la base de datos. La propiedad `created` representa la fecha y hora en que se creó el usuario en la base de datos. La propiedad `lastLogin`
-    representa la fecha y hora en que el usuario inició sesión por última vez en la aplicación. La propiedad `token` representa el token de autenticación del usuario en la aplicación. La propiedad `isActive`
-    es un indicador booleano que indica si el usuario está activo o no en la aplicación. La propiedad `name` representa el nombre del usuario. La propiedad `email` representa la dirección de correo electrónico del usuario.
-    La propiedad `password` representa la contraseña del usuario. Finalmente, la propiedad `phones` es una lista de objetos `Phone` que representa los números de teléfono asociados con el usuario.
-
-    La clase `Usuario` también tiene varios métodos getters y setters para acceder y modificar los valores de sus propiedades. También tiene dos constructores: uno sin argumentos y
-    otro que toma como argumentos una cadena de texto `email` y una cadena de texto `password`. Además, la clase tiene la anotación `@Id`, que indica que la propiedad `id` es el identificador único de la entidad en la base de datos,
-    y la anotación `@GeneratedValue`, que especifica cómo se generará el valor de la propiedad `id`.
-
-    En resumen, la clase `Usuario` es una entidad que representa a un usuario en la aplicación. Utiliza la anotación `@Entity` para indicar que es una entidad de base de datos,
-    y tiene varias propiedades que representan los datos del usuario. También tiene métodos getters y setters para acceder y modificar los valores de sus propiedades, y constructores para crear instancias de la clase.
- */

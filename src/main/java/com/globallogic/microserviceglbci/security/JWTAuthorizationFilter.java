@@ -15,26 +15,30 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//  Esta clase se utiliza como filtro para todas las solicitudes entrantes en una aplicación web.
-// El filtro intercepta cada solicitud y realiza las siguientes acciones:
-//  implementa un filtro de autenticación de tokens JWT en una aplicación web que verifica si el token de autenticación es válido y no está revocado antes de permitir el acceso a los recursos protegidos.
+/**
+ * Este filtro se utiliza para autenticar y autorizar a los usuarios en cada solicitud y para verificar si el token de autenticación está revocado. Si el token está revocado, se lanza una excepción personalizada.
+ * Si la autenticación es exitosa y el token no está revocado, el filtro continúa con la cadena de filtros.
+ */
 @Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
     private IRevokedTokenRepository IRevokedTokenRepository;
 
-    /*
-    El filtro intercepta cada solicitud y realiza las siguientes acciones:
 
-    1.- Obtiene el token de autenticación del encabezado de la solicitud.
-    2.- Si el token está presente y tiene el prefijo "Bearer", intenta autenticar al usuario utilizando el método TokenUtils.getAuthentication(token).
-    3.- Si la autenticación tiene éxito, establece la autenticación del usuario en el contexto de seguridad de Spring utilizando el objeto SecurityContextHolder.
-    4.- Verifica si el token de autenticación está revocado verificando si existe en la base de datos a través del objeto revokedTokenRepository.
-    5.- Si el token está revocado, lanza una excepción personalizada CustomException con un mensaje de error.
-    6.- Si la autenticación es exitosa y el token no está revocado, el filtro continúa con la cadena de filtros mediante filterChain.doFilter(request, response).
+    /**
+     * 1. Obtiene el token de autenticación del encabezado de la solicitud.
+     * 2. Si el token está presente y tiene el prefijo "Bearer", intenta autenticar al usuario utilizando el método `TokenUtils.getAuthentication(token)`.
+     * 3. Si la autenticación tiene éxito, establece la autenticación del usuario en el contexto de seguridad de Spring utilizando el objeto `SecurityContextHolder`.
+     * 4. Verifica si el token de autenticación está revocado verificando si existe en la base de datos a través del objeto `revokedTokenRepository`.
+     * 5. Si el token está revocado, lanza una excepción personalizada `CustomException` con un mensaje de error.
+     * 6. Si la autenticación es exitosa y el token no está revocado, el filtro continúa con la cadena de filtros mediante `filterChain.doFilter(request, response)`.
+     * @param request
+     * @param response
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException
      */
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -67,19 +71,3 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     }
 }
-
-/*
-    La anotación `@Component` indica que la clase `JWTAuthorizationFilter` es un componente de Spring y debe ser administrada por el contenedor de Spring.
-
-    Esta clase extiende la clase `OncePerRequestFilter` de Spring, que proporciona un filtro que se ejecuta una vez por solicitud. El filtro `JWTAuthorizationFilter` intercepta cada solicitud y realiza las siguientes acciones:
-
-    1. Obtiene el token de autenticación del encabezado de la solicitud.
-    2. Si el token está presente y tiene el prefijo "Bearer", intenta autenticar al usuario utilizando el método `TokenUtils.getAuthentication(token)`.
-    3. Si la autenticación tiene éxito, establece la autenticación del usuario en el contexto de seguridad de Spring utilizando el objeto `SecurityContextHolder`.
-    4. Verifica si el token de autenticación está revocado verificando si existe en la base de datos a través del objeto `revokedTokenRepository`.
-    5. Si el token está revocado, lanza una excepción personalizada `CustomException` con un mensaje de error.
-    6. Si la autenticación es exitosa y el token no está revocado, el filtro continúa con la cadena de filtros mediante `filterChain.doFilter(request, response)`.
-
-    En resumen, este filtro se utiliza para autenticar y autorizar a los usuarios en cada solicitud y para verificar si el token de autenticación está revocado. Si el token está revocado, se lanza una excepción personalizada.
-    Si la autenticación es exitosa y el token no está revocado, el filtro continúa con la cadena de filtros.
- */

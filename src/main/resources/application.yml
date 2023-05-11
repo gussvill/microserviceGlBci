@@ -1,5 +1,5 @@
 server:
-  port: 8081 #especifica el número de puerto en el que la aplicación se ejecutará.
+  port: 8081 # especifica el número de puerto en el que la aplicación se ejecutará.
 spring:
   application:
     name: springboot-bci-microservice #  establece el nombre de la aplicación.

@@ -26,6 +26,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Este es el controlador que maneja solicitudes HTTP relacionadas con usuarios.
+ */
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @Validated
@@ -44,6 +47,9 @@ public class UserController {
 
     private final IUsuarioQueryService usuarioQueryService;
 
+    /**
+     * The Usuario repository.
+     */
     @Autowired
     IUsuarioRepository IUsuarioRepository;
 
@@ -59,15 +65,32 @@ public class UserController {
     @Autowired
     private MyAppProperties myAppProperties;
 
+    /**
+     * Instantiates a new User controller.
+     *
+     * @param usuarioQueryService the usuario query service
+     */
     public UserController(UsuarioQueryServiceImpl usuarioQueryService) {
         this.usuarioQueryService = usuarioQueryService;
     }
 
+    /**
+     * Gets users.
+     *
+     * @return the users
+     */
     @GetMapping("/users")
     public List<Usuario> getUsers() {
         return IUsuarioRepository.findAll();
     }
 
+    /**
+     * Login response entity.
+     *
+     * @param usuario    the usuario
+     * @param authHeader the auth header
+     * @return the response entity
+     */
     @GetMapping("/login")
     public ResponseEntity<UsuariosResponse> login(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
@@ -108,6 +131,12 @@ public class UserController {
 
     }
 
+    /**
+     * Sign up response entity.
+     *
+     * @param usuario the usuario
+     * @return the response entity
+     */
     @PostMapping("/sign-up")
     public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
 
@@ -149,8 +178,6 @@ public class UserController {
 }
 
 /*
-Este es un controlador de Spring que maneja solicitudes HTTP relacionadas con usuarios en una aplicación web. Veamos algunas de las anotaciones y métodos utilizados en el controlador:
-
 - `@CrossOrigin(origins = "http://localhost:8081")`: permite solicitudes HTTP de origen cruzado (CORS) desde el origen especificado (en este caso, http://localhost:8081).
 - `@RestController`: indica que esta clase es un controlador de Spring que maneja solicitudes HTTP y devuelve objetos JSON.
 - `@Validated`: se utiliza para validar los objetos de entrada de las solicitudes HTTP.
@@ -164,8 +191,6 @@ Este es un controlador de Spring que maneja solicitudes HTTP relacionadas con us
 - `RevokedTokenRepository`: es una interfaz que se utiliza para acceder a la base de datos de tokens revocados.
 - `MyAppProperties`: es una clase que contiene propiedades de configuración de la aplicación (por ejemplo, formato de fecha, tiempo de expiración del token, etc.).
 - `Usuario`: es una clase de modelo que representa a un usuario en la aplicación.
-- `UsuariosResponse`: es una clase que se utiliza para devolver información sobre el usuario (por ejemplo, id, nombre, token, etc.) después del inicio de sesión.
-- `UsuarioSignUpResponse`: es una clase que se utiliza para devolver información sobre el usuario (por ejemplo, id, fecha de creación, token, etc.) después del registro.
-
-En resumen, este controlador maneja solicitudes HTTP relacionadas con el inicio de sesión y el registro de usuarios en una aplicación web utilizando Spring.
+- `UsuariosResponse`: es una clase que se utiliza para devolver información sobre el usuariodespués del inicio de sesión.
+- `UsuarioSignUpResponse`: es una clase que se utiliza para devolver información sobre el usuario después del registro.
  */
