@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * La clase `WebSecurityConfig` es una clase de configuración que define la cadena de filtros de seguridad y la configuración de autenticación y autorización en una aplicación basada en Spring Security. La anotación `@Configuration` indica que esta clase proporciona configuración a la aplicación.
  * La anotación `@AllArgsConstructor` indica que se debe generar automáticamente un constructor que acepte todos los campos de la clase como parámetros, para que Spring pueda inyectarlos automáticamente.
- *
  */
 @Configuration
 @AllArgsConstructor

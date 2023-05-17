@@ -53,6 +53,7 @@ public class MyAppProperties {
 
     /**
      * se sobrescribe el método `toString()` para proporcionar una representación legible de la clase, que incluye los valores de las propiedades de configuración.
+     *
      * @return String
      */
     @Override

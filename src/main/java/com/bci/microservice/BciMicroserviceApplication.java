@@ -12,7 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @Slf4j
 @SpringBootApplication
-@EnableEncryptableProperties // esta anotación habilita la encriptación de propiedades en la aplicación. En otras palabras, permite que las propiedades sensibles, como contraseñas
+@EnableEncryptableProperties
+// esta anotación habilita la encriptación de propiedades en la aplicación. En otras palabras, permite que las propiedades sensibles, como contraseñas
 public class BciMicroserviceApplication {
 
     /**

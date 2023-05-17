@@ -1,7 +1,7 @@
 package com.bci.microservice.security;
 
-import com.bci.microservice.exceptions.CustomException;
 import com.bci.microservice.domain.repository.IRevokedTokenRepository;
+import com.bci.microservice.exceptions.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +33,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
      * 4. Verifica si el token de autenticación está revocado verificando si existe en la base de datos a través del objeto `revokedTokenRepository`.
      * 5. Si el token está revocado, lanza una excepción personalizada `CustomException` con un mensaje de error.
      * 6. Si la autenticación es exitosa y el token no está revocado, el filtro continúa con la cadena de filtros mediante `filterChain.doFilter(request, response)`.
+     *
      * @param request
      * @param response
      * @param filterChain

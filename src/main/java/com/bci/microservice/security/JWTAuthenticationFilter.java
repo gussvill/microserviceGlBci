@@ -38,9 +38,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     /**
      * Se utiliza el método `attemptAuthentication` para intentar autenticar al usuario con las credenciales proporcionadas.
      * Este método lee las credenciales del objeto `AuthCredentials` y las convierte en un `UsernamePasswordAuthenticationToken`, que se pasa al administrador de autenticación de Spring para su validación.
-     * @param request from which to extract parameters and perform the authentication
+     *
+     * @param request  from which to extract parameters and perform the authentication
      * @param response the response, which may be needed if the implementation has to do a
-     * redirect as part of a multi-stage authentication process (such as OpenID).
+     *                 redirect as part of a multi-stage authentication process (such as OpenID).
      * @return
      * @throws AuthenticationException
      */
@@ -66,11 +67,12 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     /**
      * Si la autenticación es exitosa, el método `successfulAuthentication` crea un token JWT (JSON Web Token) utilizando la información del usuario autenticado y lo agrega a la respuesta HTTP.
      * El token se utiliza para autenticar futuras solicitudes del usuario.
+     *
      * @param request
      * @param response
      * @param chain
      * @param authResult the object returned from the <tt>attemptAuthentication</tt>
-     * method.
+     *                   method.
      * @throws IOException
      * @throws ServletException
      */
