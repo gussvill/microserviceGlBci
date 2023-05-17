@@ -29,7 +29,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // dependencia que proporciona una configuración básica para trabajar con JPA y la base de datos
     implementation 'org.springframework.boot:spring-boot-starter-web' //  dependencia que proporciona una configuración básica para construir aplicaciones web de Spring
     implementation 'org.springframework.boot:spring-boot-starter-validation' // dependencia que proporciona una configuración básica para la validación de datos en aplicaciones de Spring
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.6.14' // ependencia que proporciona una configuración básica para la seguridad en aplicaciones de Spring Boot
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.6.14' // dependencia que proporciona una configuración básica para la seguridad en aplicaciones de Spring Boot
     implementation 'org.apache.commons:commons-lang3:3.12.0' // dependencia de la biblioteca Apache Commons Lang 3, que proporciona utilidades para el manejo de cadenas, fechas, números, etc
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // dependencias para la biblioteca JJWT (Java JSON Web Token), que proporciona herramientas para trabajar con tokens JWT en aplicaciones de Java
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
@@ -45,6 +45,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.mockito:mockito-core:4.11.0' // dependencia para la biblioteca Mockito, que proporciona herramientas para escribir pruebas de unidad con objetos simulados en aplicaciones de Java.
     implementation group: 'javax.interceptor', name: 'javax.interceptor-api', version: '1.2.2'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 }
 // este bloque de código configura la tarea de prueba del proyecto para utilizar la plataforma JUnit 5.
 tasks.named('test') {

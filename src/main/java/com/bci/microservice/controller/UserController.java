@@ -26,6 +26,13 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 /**
  * Este es el controlador que maneja solicitudes HTTP relacionadas con usuarios.
  */
@@ -79,6 +86,10 @@ public class UserController {
      *
      * @return the users
      */
+    @Operation(summary = "Obtener todos los usuarios")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Se encontraron los usuarios", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
+            @ApiResponse(responseCode = "404", description = "Usuarios no encontrados", content = @Content)})
     @GetMapping("/users")
     public List<Usuario> getUsers() {
         return IUsuarioRepository.findAll();
@@ -91,8 +102,14 @@ public class UserController {
      * @param authHeader the auth header
      * @return the response entity
      */
+    @Operation(summary = "Iniciar sesión de usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Inicio de sesión exitoso", content = @Content(schema = @Schema(implementation = UsuariosResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Token inválido o usuario no existente", content = @Content),
+            @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content)
+    })
     @GetMapping("/login")
-    public ResponseEntity<UsuariosResponse> login(@Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
@@ -137,6 +154,10 @@ public class UserController {
      * @param usuario the usuario
      * @return the response entity
      */
+    @Operation(summary = "Registrar un nuevo usuario")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuario creado con éxito", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioSignUpResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos ingresados o el usuario ya existe", content = @Content)})
     @PostMapping("/sign-up")
     public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
 
