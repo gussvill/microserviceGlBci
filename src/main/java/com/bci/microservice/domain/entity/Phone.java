@@ -1,5 +1,7 @@
 package com.bci.microservice.domain.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,9 +15,14 @@ public class Phone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(hidden = true)
+
     private Long id;
+    @Schema(example = "5255766")
     private long number;
+    @Schema(example = "2")
     private int cityCode;
+    @Schema(example = "56")
     private String countryCode;
 
     /**

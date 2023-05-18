@@ -1,5 +1,7 @@
 package com.bci.microservice.domain.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,28 +15,48 @@ import java.util.UUID;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(hidden = true)
     private UUID id;
 
+    @Schema(hidden = true)
     private String created;
 
+    @Schema(hidden = true)
     private String lastLogin;
 
+    @Schema(hidden = true)
     private String token;
 
+    @Schema(hidden = true)
     private boolean isActive;
 
+    @Schema(example = "Gustavo Villegas")
     private String name;
 
     @Column(nullable = false)
     @NotBlank(message = "El correo electrónico es obligatorio")
     @Email(message = "El correo electrónico no es válido")
+    @Schema(example = "gussvill@gmail.com")
     private String email;
 
+    @Schema(example = "Guss2020")
     @Column(nullable = false)
     private String password;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id")
+    @Schema(example = "[\n" +
+            "        {\n" +
+            "            \"number\": 5255766,\n" +
+            "            \"cityCode\": 2,\n" +
+            "            \"countryCode\": \"56\"\n" +
+            "        },\n" +
+            "        {\n" +
+            "            \"number\": 93099285,\n" +
+            "            \"cityCode\": 9,\n" +
+            "            \"countryCode\": \"56\"\n" +
+            "        }\n" +
+            "    ]")
     private List<Phone> phones;
 
     /**
@@ -141,6 +163,7 @@ public class Usuario {
      *
      * @param active the active
      */
+    @Schema(hidden = true)
     public void setActive(boolean active) {
         isActive = active;
     }
