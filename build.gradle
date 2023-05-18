@@ -1,4 +1,3 @@
-//lista de plugins que se aplicaran al proyecto.
 plugins {
     id 'idea'
     id 'java'
@@ -9,63 +8,43 @@ plugins {
 
 group = 'com.bci'
 version = '1.0.0'
-sourceCompatibility = JavaVersion.VERSION_1_8 // establece la versión del compilador de Java que se usará para compilar el código fuente
-targetCompatibility = JavaVersion.VERSION_1_8 // establece la versión de Java a la que se dirigirá la compilación
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-// este bloque de código define una nueva configuración llamada compileOnly.
 configurations {
     compileOnly {
-        // es una configuración de dependencias que se utiliza para incluir bibliotecas que solo son necesarias en tiempo de compilación, pero que no son necesarias en tiempo de ejecución
         extendsFrom annotationProcessor
-        // La configuración annotationProcessor se utiliza para incluir las dependencias de procesadores de anotaciones que se utilizan en el proyecto
     }
 }
 
-// este bloque de código agrega un repositorio remoto de dependencias a Gradle para descargar las bibliotecas y dependencias necesarias del proyecto.
 repositories {
     jcenter()
 }
 
-// Este bloque de código de Gradle define las dependencias que el proyecto necesita para compilar y ejecutar
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // dependencia que proporciona una configuración básica para trabajar con JPA y la base de datos
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    //  dependencia que proporciona una configuración básica para construir aplicaciones web de Spring
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    // dependencia que proporciona una configuración básica para la validación de datos en aplicaciones de Spring
     implementation 'org.springframework.boot:spring-boot-starter-security:2.6.14'
-    // dependencia que proporciona una configuración básica para la seguridad en aplicaciones de Spring Boot
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    // dependencia de la biblioteca Apache Commons Lang 3, que proporciona utilidades para el manejo de cadenas, fechas, números, etc
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-    // dependencias para la biblioteca JJWT (Java JSON Web Token), que proporciona herramientas para trabajar con tokens JWT en aplicaciones de Java
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7.1'
-    implementation 'org.ow2.asm:asm:9.5'
-    // dependencia para la biblioteca Jackson, que proporciona herramientas para trabajar con JSON en aplicaciones de Java.
     implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
-    // dependencia para la biblioteca Jasypt, que proporciona herramientas para la encriptación de contraseñas y datos sensibles en aplicaciones de Spring Boot.
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    // dependencia que proporciona herramientas para el desarrollo en tiempo de ejecución en aplicaciones de Spring Boot.
-    runtimeOnly 'com.h2database:h2'
-    // dependencia para la base de datos embebida H2, que se utiliza comúnmente para pruebas de integración en aplicaciones de Spring.
-    compileOnly 'org.projectlombok:lombok'
-    // dependencia que proporciona herramientas para simplificar la escritura de código Java, reduciendo la cantidad de código repetitivo.
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
-    // dependencias para JUnit y AssertJ, que proporcionan herramientas para escribir pruebas unitarias en aplicaciones de Java.
-    testImplementation 'org.assertj:assertj-core:3.24.2'
-    testImplementation 'org.mockito:mockito-core:4.11.0'
-    // dependencia para la biblioteca Mockito, que proporciona herramientas para escribir pruebas de unidad con objetos simulados en aplicaciones de Java.
     implementation group: 'javax.interceptor', name: 'javax.interceptor-api', version: '1.2.2'
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 //    implementation 'mysql:mysql-connector-java:8.0.33'
-
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
 }
-// este bloque de código configura la tarea de prueba del proyecto para utilizar la plataforma JUnit 5.
+
 tasks.named('test') {
     useJUnitPlatform()
 }
