@@ -53,11 +53,11 @@ public class UserController {
 
     private final IUsuarioQueryService usuarioQueryService;
 
-    /**
-     * The Usuario repository.
-     */
     @Autowired
-    IUsuarioRepository IUsuarioRepository;
+    private IUsuarioRepository iUsuarioRepository;
+
+    @Autowired
+    private UsuarioQueryServiceImpl usuarioQueryServiceImpl;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -92,7 +92,7 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
     public List<Usuario> getUsers() {
-        return IUsuarioRepository.findAll();
+        return usuarioQueryServiceImpl.getUsers();
     }
 
     /**
@@ -177,8 +177,7 @@ public class UserController {
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
-                usuario.setPhones(usuario.getPhones());
-                Usuario usuarioSave = usuarioQueryService.save(usuario);
+                Usuario usuarioSave = iUsuarioRepository.save(usuario);
 
                 UsuarioSignUpResponse usuarioSignUpResponse = new UsuarioSignUpResponse();
                 usuarioSignUpResponse.setId(usuarioSave.getId());

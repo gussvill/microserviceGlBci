@@ -10,7 +10,7 @@ spring:
     username: ENC(VKRXxsCv+63sEhTbwqVIEA==)
     hikari:
       auto-commit: true
-      connectionTimeout: 120000
+      connectionTimeout: 600000
       maximumPoolSize: 5
       minimumIdle: 2
   h2: # habilita la consola de la base de datos H2
@@ -32,4 +32,4 @@ spring:
 
 myapp: # configura las propiedades de la aplicación, incluyendo el formato de fecha y el tiempo de expiración del token
   formatDate: "MMM dd, yyyy hh:mm:ss a"
-  expirationTokenMs: 60000
+  expirationTokenMs: 300000

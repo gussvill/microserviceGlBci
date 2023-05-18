@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -57,7 +58,7 @@ public class Usuario {
             "            \"countryCode\": \"56\"\n" +
             "        }\n" +
             "    ]")
-    private List<Phone> phones;
+    private Set<Phone> phones;
 
     /**
      * Instantiates a new Usuario.
@@ -227,7 +228,7 @@ public class Usuario {
      *
      * @return the phones
      */
-    public List<Phone> getPhones() {
+    public Set<Phone> getPhones() {
         return phones;
     }
 
@@ -236,7 +237,19 @@ public class Usuario {
      *
      * @param phones the phones
      */
-    public void setPhones(List<Phone> phones) {
+    public void setPhones(Set<Phone> phones) {
+        this.phones = phones;
+    }
+
+    public Usuario(UUID id, String created, String lastLogin, String token, boolean isActive, String name, String email, String password, Set<Phone> phones) {
+        this.id = id;
+        this.created = created;
+        this.lastLogin = lastLogin;
+        this.token = token;
+        this.isActive = isActive;
+        this.name = name;
+        this.email = email;
+        this.password = password;
         this.phones = phones;
     }
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -25,5 +26,5 @@ public class UsuariosResponse {
     private String name;
     private String email;
     private String password;
-    private List<Phone> phones;
+    private Set<Phone> phones;
 }
