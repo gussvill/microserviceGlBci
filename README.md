@@ -62,14 +62,19 @@ El microservicio tiene dos endpoints:
 
 ```json
 {
-  "name": "Julio Gonzalez",
-  "email": "julio@testssw.cl",
-  "password": "a2asfGfdfdf4",
+  "name" : "Gustavo Villegas",
+  "email" : "gussvill@gmail.com",
+  "password": "Guss2020",
   "phones": [
     {
-      "number": 87650009,
-      "cityCode": 7,
-      "countryCode": "25"
+      "number": 5255766,
+      "cityCode": 2,
+      "countryCode": "56"
+    },
+    {
+      "number": 93099285,
+      "cityCode": 9,
+      "countryCode": "56"
     }
   ]
 }
@@ -79,11 +84,11 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 
 ```json
 {
-  "id": "b2b8a1cc-5b7d-435c-82d7-ab8cf4855d2f",
-  "created": "May 01, 2023 01:34:55 AM",
+  "id": "6b6cb264-3ed2-4a62-bedc-15b1a6ab5914",
+  "created": "may 18, 2023 03:14:58 PM",
   "lastLogin": "The user is not logged in yet. No Data!",
-  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWxpb0B0ZXN0c3N3LmNsIiwiZXhwIjoxNjgyOTI1Mjk1LCJwYXNzd29yZCI6IiQyYSQxMCRMaERqb28zMnJuZXNTQjFDczNVUTV1TjhSWERYSzZhd2pzZnhNRTMxTTFOeWVnblNuS0NZSyJ9.ZUv58i9kDgvUV2nRDUgkSRiEq0Qr3lowPKUFjFbNKdo",
-  "active": true
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ0Mzc1OTgsInBhc3N3b3JkIjoiJDJhJDEwJHJKUVJJNUU0SkwzOUZUenVLRWJzYi5NUkIucy40bnFCRC9PazlwTk9adjZOc296SUw0OUJHIn0.zCGAYISpug32ptcN-CxEK19AQHshZc0xZ87zMB2m09E",
+  "isActive": true
 }
 ```
 
@@ -92,24 +97,23 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 
 ```json
 {
-  "email": "julio@testssw.cl"
+  "email" : "gussvill@gmail.com"
 }
-
 ```
 
 El endpoint retorna el siguiente contrato de salida en formato JSON:
 
 ```json
 {
-  "id": "b2b8a1cc-5b7d-435c-82d7-ab8cf4855d2f",
-  "created": "May 01, 2023 01:34:55 AM",
+  "id": "6b6cb264-3ed2-4a62-bedc-15b1a6ab5914",
+  "created": "may 18, 2023 03:14:58 PM",
   "lastLogin": "The user is not logged in yet. No Data!",
-  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdWxpb0B0ZXN0c3N3LmNsIiwiZXhwIjoxNjgyOTI1Mjk1LCJwYXNzd29yZCI6IiQyYSQxMCRMaERqb28zMnJuZXNTQjFDczNVUTV1TjhSWERYSzZhd2pzZnhNRTMxTTFOeWVnblNuS0NZSyJ9.ZUv58i9kDgvUV2nRDUgkSRiEq0Qr3lowPKUFjFbNKdo",
-  "name": "Julio Gonzalez",
-  "email": "julio@testssw.cl",
-  "password": "$2a$10$LhDjoo32rnesSB1Cs3UQ5uN8RXDXK6awjsfxME31M1NyegnSnKCYK",
-  "phones": [],
-  "active": true
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ0Mzc3MDV9.kJ77ortd5YIJWw6LOr3SlostE6Y4PUndZ5g1hPfbZ8E",
+  "name": "Gustavo Villegas",
+  "email": "gussvill@gmail.com",
+  "password": "$2a$10$rJQRI5E4JL39FTzuKEbsb.MRB.s.4nqBD/Ok9pNOZv6NsozIL49BG",
+  "phones": "[{\"id\":null,\"number\":5255766,\"cityCode\":2,\"countryCode\":\"56\"},{\"id\":null,\"number\":93099285,\"cityCode\":9,\"countryCode\":\"56\"}]",
+  "isActive": true
 }
 ```
 
