@@ -1,8 +1,8 @@
 package com.bci.microservice;
 
-import com.bci.microservice.domain.entity.Usuario;
-import com.bci.microservice.domain.repository.IUsuarioRepository;
-import com.bci.microservice.service.UsuarioQueryServiceImpl;
+import com.bci.microservice.domain.repository.UsuarioRepository;
+import com.bci.microservice.persistence.jpa.UsuarioJpaRepository;
+import com.bci.microservice.persistence.entity.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,13 +22,13 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class UsuarioServiceTest {
+public class UsuarioRepositoryTest {
 
     @Autowired
-    private UsuarioQueryServiceImpl usuarioQueryServiceImpl;
+    private UsuarioRepository usuarioRepository;
 
     @MockBean
-    private IUsuarioRepository IUsuarioRepository;
+    private UsuarioJpaRepository UsuarioJpaRepository;
 
     @Test
     public void testGetUserByEmailOptional() {
@@ -44,22 +44,19 @@ public class UsuarioServiceTest {
         List<Usuario> usuarios = Arrays.asList(usuario1, usuario2);
 
         // Establecer el comportamiento esperado del mock
-        when(IUsuarioRepository.findByEmailContaining("test"))
-                .thenReturn(Optional.of(usuario1));
-        when(IUsuarioRepository.findByEmailContaining("no-existe"))
-                .thenReturn(Optional.empty());
-        when(IUsuarioRepository.findByEmailContaining(""))
-                .thenReturn(Optional.ofNullable(null));
-        when(IUsuarioRepository.findByEmailContaining("multiple"))
+        when(UsuarioJpaRepository.findByEmailContaining("test")).thenReturn(Optional.of(usuario1));
+        when(UsuarioJpaRepository.findByEmailContaining("no-existe")).thenReturn(Optional.empty());
+        when(UsuarioJpaRepository.findByEmailContaining("")).thenReturn(Optional.ofNullable(null));
+        when(UsuarioJpaRepository.findByEmailContaining("multiple"))
                 .thenReturn(Optional.of(usuario1))
                 .thenReturn(Optional.of(usuario2));
 
         // Llamar al método del servicio y verificar los resultados
-        assertEquals(Optional.of(usuario1), usuarioQueryServiceImpl.getUserByEmail("test"));
-        assertEquals(Optional.empty(), usuarioQueryServiceImpl.getUserByEmail("no-existe"));
-        assertEquals(Optional.ofNullable(null), usuarioQueryServiceImpl.getUserByEmail(""));
-        assertEquals(Optional.of(usuario1), usuarioQueryServiceImpl.getUserByEmail("multiple"));
-        assertEquals(Optional.of(usuario2), usuarioQueryServiceImpl.getUserByEmail("multiple"));
+        assertEquals(Optional.of(usuario1), usuarioRepository.getUserByEmail("test"));
+        assertEquals(Optional.empty(), usuarioRepository.getUserByEmail("no-existe"));
+        assertEquals(Optional.ofNullable(null), usuarioRepository.getUserByEmail(""));
+        assertEquals(Optional.of(usuario1), usuarioRepository.getUserByEmail("multiple"));
+        assertEquals(Optional.of(usuario2), usuarioRepository.getUserByEmail("multiple"));
     }
 
     @Test
@@ -70,10 +67,10 @@ public class UsuarioServiceTest {
         expectedUsuario.setEmail(email);
 
         // Configurar el comportamiento del mock
-        Mockito.when(IUsuarioRepository.findByEmail(email)).thenReturn(expectedUsuario);
+        Mockito.when(UsuarioJpaRepository.findByEmail(email)).thenReturn(expectedUsuario);
 
         // Invocar al método a probar
-        Usuario actualUsuario = usuarioQueryServiceImpl.getUserByEmail(email, null);
+        Usuario actualUsuario = usuarioRepository.getUserByEmail(email, null);
 
         // Verificar el resultado
         Assertions.assertEquals(expectedUsuario, actualUsuario);
@@ -94,14 +91,14 @@ public class UsuarioServiceTest {
 
         // Given
         List<Usuario> expectedUsuarios = Arrays.asList(usuario, usuario2);
-        when(IUsuarioRepository.findAll()).thenReturn(expectedUsuarios);
+        when(UsuarioJpaRepository.findAll()).thenReturn(expectedUsuarios);
 
         // When
-        List<Usuario> actualUsuarios = usuarioQueryServiceImpl.getUsers();
+        List<Usuario> actualUsuarios = usuarioRepository.getUsers();
 
         // Then
         assertEquals(expectedUsuarios, actualUsuarios);
-        verify(IUsuarioRepository).findAll();
+        verify(UsuarioJpaRepository).findAll();
     }
 
 
@@ -113,11 +110,11 @@ public class UsuarioServiceTest {
         usuario.setPassword("Guss2023");
 
         // define el comportamiento del repositorio
-        when(IUsuarioRepository.save(any(Usuario.class))).thenReturn(usuario);
+        when(UsuarioJpaRepository.save(any(Usuario.class))).thenReturn(usuario);
 
         // llama al método del servicio y verifica el resultado
-        Usuario result = usuarioQueryServiceImpl.save(usuario);
-        verify(IUsuarioRepository, times(1)).save(usuario);
+        Usuario result = usuarioRepository.save(usuario);
+        verify(UsuarioJpaRepository, times(1)).save(usuario);
         assertEquals(usuario, result);
     }
 
@@ -128,10 +125,10 @@ public class UsuarioServiceTest {
         String newToken = "1234567890";
 
         // llama al método del servicio
-        usuarioQueryServiceImpl.updateToken(email, newToken);
+        usuarioRepository.updateToken(email, newToken);
 
         // verifica si el método del repositorio se llamó una vez con los parámetros adecuados
-        verify(IUsuarioRepository, times(1)).updateToken(email, newToken);
+        verify(UsuarioJpaRepository, times(1)).updateToken(email, newToken);
     }
 
     @Test
@@ -141,10 +138,10 @@ public class UsuarioServiceTest {
         String date = "2023-05-01";
 
         // When
-        usuarioQueryServiceImpl.updateLastLogin(email, date);
+        usuarioRepository.updateLastLogin(email, date);
 
         // Then
-        verify(IUsuarioRepository).updateLastLogin(email, date);
+        verify(UsuarioJpaRepository).updateLastLogin(email, date);
     }
 
 

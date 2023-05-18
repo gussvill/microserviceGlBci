@@ -1,7 +1,7 @@
 package com.bci.microservice.security;
 
-import com.bci.microservice.domain.repository.IRevokedTokenRepository;
 import com.bci.microservice.exceptions.CustomException;
+import com.bci.microservice.persistence.jpa.RevokedTokenJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private IRevokedTokenRepository IRevokedTokenRepository;
+    private RevokedTokenJpaRepository IRevokedTokenJpaRepository;
 
 
     /**
@@ -55,7 +55,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePAT);
 
                 String tokenB = request.getHeader("Authorization").substring(7);
-                if (IRevokedTokenRepository.existsByToken(tokenB)) {
+                if (IRevokedTokenJpaRepository.existsByToken(tokenB)) {
                     throw new CustomException("Token has been revoked", "{\"error\": \"Token has been revoked\"}");
                 }
 

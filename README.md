@@ -92,7 +92,7 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 }
 ```
 
-* GET /login: Devuelve la siguiente informacion del usuario, una vez autenticandose con el token generado anteriormente
+* GET /login: Devuelve la siguiente información del usuario, una vez autenticándose con el token generado anteriormente
   y con el siguiente contrato de entrada en formato JSON:
 
 ```json

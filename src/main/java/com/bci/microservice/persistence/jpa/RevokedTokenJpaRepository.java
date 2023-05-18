@@ -1,12 +1,12 @@
-package com.bci.microservice.domain.repository;
+package com.bci.microservice.persistence.jpa;
 
-import com.bci.microservice.domain.entity.RevokedToken;
+import com.bci.microservice.persistence.entity.RevokedToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * La interfaz `RevokedTokenRepository` es una interfaz de repositorio que se utiliza para interactuar con los tokens revocados en una aplicación.
  */
-public interface IRevokedTokenRepository extends JpaRepository<RevokedToken, Long> {
+public interface RevokedTokenJpaRepository extends JpaRepository<RevokedToken, Long> {
 
     /**
      * Exists by token boolean.

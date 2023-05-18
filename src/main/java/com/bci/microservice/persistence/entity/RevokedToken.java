@@ -1,4 +1,4 @@
-package com.bci.microservice.domain.entity;
+package com.bci.microservice.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import javax.persistence.*;
  * La clase `RevokedToken` es una entidad que representa un token revocado en la aplicación.
  */
 @Entity
-@Table(name = "RevokedToken")
+@Table(name = "RevokedTokens")
 @Data
 @AllArgsConstructor
 @Builder
@@ -18,6 +18,7 @@ public class RevokedToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_revoked_token")
     private Long id;
 
     @Column(nullable = false, unique = true)

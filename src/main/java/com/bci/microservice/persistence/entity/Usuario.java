@@ -1,4 +1,4 @@
-package com.bci.microservice.domain.entity;
+package com.bci.microservice.persistence.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,10 +14,13 @@ import java.util.UUID;
  * La clase `Usuario` es una entidad que representa a un usuario en la aplicación.
  */
 @Entity
+@Table(name = "usuarios")
 public class Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Schema(hidden = true)
+    @Column(name = "id_usuario")
     private UUID id;
 
     @Schema(hidden = true)
@@ -45,8 +48,7 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "usuario_id")
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Schema(example = "[\n" +
             "        {\n" +
             "            \"number\": 5255766,\n" +

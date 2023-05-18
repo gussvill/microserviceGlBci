@@ -1,22 +1,20 @@
-package com.bci.microservice.domain.entity;
+package com.bci.microservice.persistence.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * The type Phone.
  */
 @Entity
+@Table(name = "phones")
 public class Phone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Schema(hidden = true)
-
+    @Column(name = "id_phone")
     private Long id;
     @Schema(example = "5255766")
     private long number;
@@ -24,6 +22,10 @@ public class Phone {
     private int cityCode;
     @Schema(example = "56")
     private String countryCode;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", insertable = false, updatable = false)
+    private Usuario usuario;
 
     /**
      * Instantiates a new Phone.

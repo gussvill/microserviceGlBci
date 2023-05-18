@@ -1,6 +1,6 @@
-package com.bci.microservice.service;
+package com.bci.microservice.domain.repository;
 
-import com.bci.microservice.domain.entity.Usuario;
+import com.bci.microservice.persistence.entity.Usuario;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import java.util.Optional;
  * La interfaz no proporciona una implementación concreta de estos métodos, sino que define la firma de los mismos.
  */
 // define el contrato que deben cumplir las implementacion.
-public interface IUsuarioQueryService {
+public interface UsuarioRepository {
     /**
      * Gets user by email.
      *

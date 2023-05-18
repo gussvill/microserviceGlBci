@@ -1,15 +1,14 @@
-package com.bci.microservice.controller;
+package com.bci.microservice.web.controller;
 
-import com.bci.microservice.domain.entity.RevokedToken;
-import com.bci.microservice.domain.entity.Usuario;
-import com.bci.microservice.domain.repository.IRevokedTokenRepository;
-import com.bci.microservice.domain.repository.IUsuarioRepository;
+import com.bci.microservice.domain.service.UsuarioService;
 import com.bci.microservice.exceptions.InputValidationException;
+import com.bci.microservice.persistence.jpa.RevokedTokenJpaRepository;
+import com.bci.microservice.persistence.jpa.UsuarioJpaRepository;
+import com.bci.microservice.persistence.entity.RevokedToken;
+import com.bci.microservice.persistence.entity.Usuario;
 import com.bci.microservice.response.UsuarioSignUpResponse;
 import com.bci.microservice.response.UsuariosResponse;
 import com.bci.microservice.security.TokenUtils;
-import com.bci.microservice.service.IUsuarioQueryService;
-import com.bci.microservice.service.UsuarioQueryServiceImpl;
 import com.bci.microservice.utils.DateUtils;
 import com.bci.microservice.utils.MyAppProperties;
 import io.jsonwebtoken.JwtException;
@@ -51,13 +50,12 @@ public class UserController {
     private static final String INVALID_TOKEN = "Invalid or expired token";
     private static final String INVALID_LAST_LOGIN = "The user is not logged in yet. No Data!";
 
-    private final IUsuarioQueryService usuarioQueryService;
 
     @Autowired
-    private IUsuarioRepository iUsuarioRepository;
+    private UsuarioJpaRepository iUsuarioJpaRepository;
 
     @Autowired
-    private UsuarioQueryServiceImpl usuarioQueryServiceImpl;
+    private UsuarioService usuarioService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -66,19 +64,11 @@ public class UserController {
     private JwtParser jwtParser;
 
     @Autowired
-    private IRevokedTokenRepository IRevokedTokenRepository;
+    private RevokedTokenJpaRepository IRevokedTokenJpaRepository;
 
     @Autowired
     private MyAppProperties myAppProperties;
 
-    /**
-     * Instantiates a new User controller.
-     *
-     * @param usuarioQueryService the usuario query service
-     */
-    public UserController(UsuarioQueryServiceImpl usuarioQueryService) {
-        this.usuarioQueryService = usuarioQueryService;
-    }
 
     /**
      * Gets users.
@@ -92,7 +82,7 @@ public class UserController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
     public List<Usuario> getUsers() {
-        return usuarioQueryServiceImpl.getUsers();
+        return usuarioService.getUsers();
     }
 
     /**
@@ -113,17 +103,17 @@ public class UserController {
     public ResponseEntity<UsuariosResponse> login(/*@Parameter(description = "Usuario para iniciar sesión")*/ @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
-        Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
+        Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
 
         try {
             if (usuarioList.isPresent()) {
                 jwtParser.parseClaimsJws(token).getBody();
-                usuarioQueryService.updateLastLogin(usuario.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
-                IRevokedTokenRepository.save(new RevokedToken(token));
+                usuarioService.updateLastLogin(usuario.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
+                IRevokedTokenJpaRepository.save(new RevokedToken(token));
 
-                Usuario updatedUser = usuarioQueryService.getUserByEmail(usuario.getEmail(), null);
+                Usuario updatedUser = usuarioService.getUserByEmail(usuario.getEmail(), null);
                 String newToken = TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs());
-                usuarioQueryService.updateToken(usuario.getEmail(), newToken);
+                usuarioService.updateToken(usuario.getEmail(), newToken);
                 updatedUser.setToken(newToken);
 
                 UsuariosResponse usuariosResponse = new UsuariosResponse();
@@ -164,7 +154,7 @@ public class UserController {
 
         try {
 
-            Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
+            Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
 
             if (!usuarioList.isPresent()) {
                 if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
@@ -178,7 +168,7 @@ public class UserController {
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
                 usuario.setPhonesAsJson(usuario.getPhones());
-                Usuario usuarioSave = iUsuarioRepository.save(usuario);
+                Usuario usuarioSave = iUsuarioJpaRepository.save(usuario);
 
                 UsuarioSignUpResponse usuarioSignUpResponse = new UsuarioSignUpResponse();
                 usuarioSignUpResponse.setId(usuarioSave.getId());
