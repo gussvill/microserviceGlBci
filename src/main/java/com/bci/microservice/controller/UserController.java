@@ -14,6 +14,7 @@ import com.bci.microservice.utils.DateUtils;
 import com.bci.microservice.utils.MyAppProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -90,6 +91,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Se encontraron los usuarios", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
             @ApiResponse(responseCode = "404", description = "Usuarios no encontrados", content = @Content)})
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
     public List<Usuario> getUsers() {
         return IUsuarioRepository.findAll();
@@ -108,8 +110,9 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Token inválido o usuario no existente", content = @Content),
             @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content)
     })
+    @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
-    public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuariosResponse> login(/*@Parameter(description = "Usuario para iniciar sesión")*/ @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioQueryService.getUserByEmail(usuario.getEmail());
