@@ -135,7 +135,7 @@ public class UserController {
                 usuariosResponse.setName(updatedUser.getName());
                 usuariosResponse.setEmail(updatedUser.getEmail());
                 usuariosResponse.setPassword(updatedUser.getPassword());
-                usuariosResponse.setPhones(updatedUser.getPhones());
+                usuariosResponse.setPhones(updatedUser.getListPhones());
 
                 return new ResponseEntity<>(usuariosResponse, HttpStatus.ACCEPTED);
 
@@ -177,6 +177,7 @@ public class UserController {
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
+                usuario.setPhonesAsJson(usuario.getPhones());
                 Usuario usuarioSave = iUsuarioRepository.save(usuario);
 
                 UsuarioSignUpResponse usuarioSignUpResponse = new UsuarioSignUpResponse();

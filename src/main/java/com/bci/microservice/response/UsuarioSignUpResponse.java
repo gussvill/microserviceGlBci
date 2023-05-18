@@ -1,5 +1,6 @@
 package com.bci.microservice.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,6 @@ public class UsuarioSignUpResponse {
     private String created;
     private String lastLogin;
     private String token;
+    @JsonProperty("isActive")
     private boolean isActive;
 }

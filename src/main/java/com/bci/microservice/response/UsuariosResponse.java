@@ -1,13 +1,11 @@
 package com.bci.microservice.response;
 
-import com.bci.microservice.domain.entity.Phone;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -22,9 +20,10 @@ public class UsuariosResponse {
     private String created;
     private String lastLogin;
     private String token;
+    @JsonProperty("isActive")
     private boolean isActive;
     private String name;
     private String email;
     private String password;
-    private Set<Phone> phones;
+    private String phones;
 }

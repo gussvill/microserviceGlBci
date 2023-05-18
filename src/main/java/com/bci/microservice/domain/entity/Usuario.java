@@ -1,11 +1,12 @@
 package com.bci.microservice.domain.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -59,6 +60,28 @@ public class Usuario {
             "        }\n" +
             "    ]")
     private Set<Phone> phones;
+
+    private String listPhones;
+
+    public String getListPhones() {
+        return listPhones;
+    }
+
+    public void setListPhones(String listPhones) {
+        this.listPhones = listPhones;
+    }
+
+    public void setPhonesAsJson(Set<Phone> phones) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String jsonPhones = objectMapper.writeValueAsString(phones);
+            this.listPhones = jsonPhones;
+        } catch (JsonProcessingException e) {
+            // Manejar la excepción si ocurre algún error durante la conversión
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Instantiates a new Usuario.
@@ -241,7 +264,7 @@ public class Usuario {
         this.phones = phones;
     }
 
-    public Usuario(UUID id, String created, String lastLogin, String token, boolean isActive, String name, String email, String password, Set<Phone> phones) {
+    public Usuario(UUID id, String created, String lastLogin, String token, boolean isActive, String name, String email, String password) {
         this.id = id;
         this.created = created;
         this.lastLogin = lastLogin;
@@ -250,6 +273,5 @@ public class Usuario {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.phones = phones;
     }
 }

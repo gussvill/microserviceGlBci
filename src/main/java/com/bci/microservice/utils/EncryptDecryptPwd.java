@@ -11,8 +11,8 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
 @Slf4j
 public class EncryptDecryptPwd {
 
-    private static final String DB_USERNAME = "product";
-    private static final String DB_PWD = "password!234#";
+    private static final String DB_USERNAME = "root";
+    private static final String DB_PWD = "guss2020";
 
     /**
      * The entry point of application.
@@ -23,8 +23,8 @@ public class EncryptDecryptPwd {
         encryptKey(DB_USERNAME);
         encryptKey(DB_PWD);
 
-//        decryptKey("BJQ0oyj1UVjIbV1Z2wUzlA==");
-//        decryptKey("fl8OJudxGl4GXBnbDD140Ujo5kDAZFOm");
+//        decryptKey("ENC(g8Qj4Uy+VXWsthoaM6Tp8g==)");
+//        decryptKey("ENC(+HLaW95AR6oZnEjrC8o4rs1ExUiCjEAx)");
     }
 
     /**
