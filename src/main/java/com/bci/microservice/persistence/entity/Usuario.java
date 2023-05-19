@@ -63,6 +63,7 @@ public class Usuario {
             "    ]")
     private Set<Phone> phones;
 
+    @Schema(hidden = true)
     private String listPhones;
 
     public String getListPhones() {
@@ -72,7 +73,7 @@ public class Usuario {
     public void setListPhones(String listPhones) {
         this.listPhones = listPhones;
     }
-
+    @Schema(hidden = true)
     public void setPhonesAsJson(Set<Phone> phones) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -266,14 +267,4 @@ public class Usuario {
         this.phones = phones;
     }
 
-    public Usuario(UUID id, String created, String lastLogin, String token, boolean isActive, String name, String email, String password) {
-        this.id = id;
-        this.created = created;
-        this.lastLogin = lastLogin;
-        this.token = token;
-        this.isActive = isActive;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 }

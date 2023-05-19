@@ -22,7 +22,7 @@ import java.util.List;
         @Info(
                 title = "API microservicio BCI",
                 version = "v1",
-                description = "Esta es una API para el microservicio BCI. Proporciona endpoints para crear usuarios, obtener el listado de todos los usarios y hacer login con un usuario existente.. \n\n" +
+                description = "Esta es una API para el microservicio BCI. Proporciona endpoints para crear usuarios, obtener el listado de todos los usuarios y hacer login con un usuario existente.. \n\n" +
                         "El repositorio de GitHub para este proyecto se encuentra en: [GitHub](https://github.com/gussvill/microserviceGlBci.git)",
                 contact = @Contact(
                         name = "Gustavo Villegas",

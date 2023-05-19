@@ -106,10 +106,4 @@ public class Phone {
         this.countryCode = countryCode;
     }
 
-    public Phone(Long id, long number, int cityCode, String countryCode) {
-        this.id = id;
-        this.number = number;
-        this.cityCode = cityCode;
-        this.countryCode = countryCode;
-    }
 }
