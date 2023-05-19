@@ -260,6 +260,6 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 ### Guides
 
 * Utilizar el archivo postman incluido en la carpeta documentations para probar los endpoints.
-* Como alternativa se puede utilizar la url de Swagger para probar los endpoints: http://localhost:8081/bci-microservice/swagger-ui.html
+* Como alternativa se puede utilizar la url de Swagger para probar los endpoints: http://localhost:8081/bci-microservice/api/swagger-ui/index.html
 
 
