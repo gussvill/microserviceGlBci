@@ -6,6 +6,7 @@ import com.bci.microservice.persistence.jpa.RevokedTokenJpaRepository;
 import com.bci.microservice.persistence.jpa.UsuarioJpaRepository;
 import com.bci.microservice.persistence.entity.RevokedToken;
 import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.request.LoginUsuarioRequest;
 import com.bci.microservice.response.UsuarioSignUpResponse;
 import com.bci.microservice.response.UsuariosResponse;
 import com.bci.microservice.security.TokenUtils;
@@ -101,20 +102,20 @@ public class UserController {
     })
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
-    public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody LoginUsuarioRequest loginRequest, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
-        Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
+        Optional<Usuario> usuarioList = usuarioService.getUserByEmail(loginRequest.getEmail());
 
         try {
             if (usuarioList.isPresent()) {
                 jwtParser.parseClaimsJws(token).getBody();
-                usuarioService.updateLastLogin(usuario.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
+                usuarioService.updateLastLogin(loginRequest.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
                 IRevokedTokenJpaRepository.save(new RevokedToken(token));
 
-                Usuario updatedUser = usuarioService.getUserByEmail(usuario.getEmail(), null);
-                String newToken = TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs());
-                usuarioService.updateToken(usuario.getEmail(), newToken);
+                Usuario updatedUser = usuarioService.getUserByEmail(loginRequest.getEmail(), null);
+                String newToken = TokenUtils.createToken(loginRequest.getEmail(), loginRequest.getPassword(), myAppProperties.getExpirationTokenMs());
+                usuarioService.updateToken(loginRequest.getEmail(), newToken);
                 updatedUser.setToken(newToken);
 
                 UsuariosResponse usuariosResponse = new UsuariosResponse();
