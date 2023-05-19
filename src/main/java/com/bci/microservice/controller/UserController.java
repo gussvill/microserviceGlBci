@@ -1,4 +1,4 @@
-package com.bci.microservice.web.controller;
+package com.bci.microservice.controller;
 
 import com.bci.microservice.domain.service.UsuarioService;
 import com.bci.microservice.exceptions.InputValidationException;
