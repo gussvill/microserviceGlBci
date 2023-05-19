@@ -10,10 +10,10 @@ spring:
   datasource:
 #    driverClassName: com.mysql.cj.jdbc.Driver
     driverClassName: org.h2.Driver
-    password: ENC(+HLaW95AR6oZnEjrC8o4rs1ExUiCjEAx)
+    password: ENC(NBX2RHYV6K3Gf1eHI93Xad1FwdN0ED9u)
     url: 'jdbc:h2:mem:testdb'
 #    url: 'jdbc:mysql://172.17.0.2:3306/develop?useSSL=false&serverTimezone=America/Santiago&allowPublicKeyRetrieval=true'
-    username: ENC(g8Qj4Uy+VXWsthoaM6Tp8g==)
+    username: ENC(LTuzsowYJ7DHzacC0mkGNg==)
     hikari:
       auto-commit: true
       connectionTimeout: 600000

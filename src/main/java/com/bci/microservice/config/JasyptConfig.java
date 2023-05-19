@@ -20,7 +20,7 @@ public class JasyptConfig {
     public static SimpleStringPBEConfig getSimpleStringPBEConfig() {
         final SimpleStringPBEConfig pbeConfig = new SimpleStringPBEConfig();
 
-        pbeConfig.setPassword("javacodegeek");  //encryptor private key
+        pbeConfig.setPassword("guss2020");  //encryptor private key
         pbeConfig.setAlgorithm("PBEWithMD5AndDES");
         pbeConfig.setKeyObtentionIterations("1000");
         pbeConfig.setPoolSize("1");

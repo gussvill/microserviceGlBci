@@ -23,8 +23,8 @@ public class EncryptDecryptPwd {
         encryptKey(DB_USERNAME);
         encryptKey(DB_PWD);
 
-//        decryptKey("ENC(g8Qj4Uy+VXWsthoaM6Tp8g==)");
-//        decryptKey("ENC(+HLaW95AR6oZnEjrC8o4rs1ExUiCjEAx)");
+//        decryptKey("ENC(LTuzsowYJ7DHzacC0mkGNg==)");
+//        decryptKey("ENC(NBX2RHYV6K3Gf1eHI93Xad1FwdN0ED9u)");
     }
 
     /**
