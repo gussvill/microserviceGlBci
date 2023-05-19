@@ -35,21 +35,19 @@ public class UsuarioRepositoryTest {
 
         // Crear los datos de prueba
         Usuario usuario1 = new Usuario();
-        usuario1.setEmail("johndoe@example.com");
-        usuario1.setPassword("Guss2023");
+        usuario1.setEmail("gussvill@example.com");
+        usuario1.setPassword("Top2023");
 
         Usuario usuario2 = new Usuario();
-        usuario2.setEmail("guss@example.com");
-        usuario2.setPassword("Top2023");
+        usuario2.setEmail("gussvill78@example.com");
+        usuario2.setPassword("Top2024");
         List<Usuario> usuarios = Arrays.asList(usuario1, usuario2);
 
         // Establecer el comportamiento esperado del mock
         when(UsuarioJpaRepository.findByEmailContaining("test")).thenReturn(Optional.of(usuario1));
         when(UsuarioJpaRepository.findByEmailContaining("no-existe")).thenReturn(Optional.empty());
         when(UsuarioJpaRepository.findByEmailContaining("")).thenReturn(Optional.ofNullable(null));
-        when(UsuarioJpaRepository.findByEmailContaining("multiple"))
-                .thenReturn(Optional.of(usuario1))
-                .thenReturn(Optional.of(usuario2));
+        when(UsuarioJpaRepository.findByEmailContaining("multiple")).thenReturn(Optional.of(usuario1)).thenReturn(Optional.of(usuario2));
 
         // Llamar al método del servicio y verificar los resultados
         assertEquals(Optional.of(usuario1), usuarioRepository.getUserByEmail("test"));
@@ -62,7 +60,7 @@ public class UsuarioRepositoryTest {
     @Test
     public void testGetUserByEmail() {
         // Datos de prueba
-        String email = "usuario@example.com";
+        String email = "gussvill@example.com";
         Usuario expectedUsuario = new Usuario();
         expectedUsuario.setEmail(email);
 
@@ -77,17 +75,16 @@ public class UsuarioRepositoryTest {
 
     }
 
-
     @Test
     public void testGetUsers() {
 
         Usuario usuario = new Usuario();
-        usuario.setEmail("johndoe@example.com");
-        usuario.setPassword("Guss2023");
+        usuario.setEmail("gussvill@example.com");
+        usuario.setPassword("Top2023");
 
         Usuario usuario2 = new Usuario();
-        usuario.setEmail("guss@example.com");
-        usuario.setPassword("Top2023");
+        usuario.setEmail("gussvill78@example.com");
+        usuario.setPassword("Top2024");
 
         // Given
         List<Usuario> expectedUsuarios = Arrays.asList(usuario, usuario2);
@@ -101,13 +98,12 @@ public class UsuarioRepositoryTest {
         verify(UsuarioJpaRepository).findAll();
     }
 
-
     @Test
     public void testSaveUser() {
         // crea un usuario de prueba
         Usuario usuario = new Usuario();
-        usuario.setEmail("johndoe@example.com");
-        usuario.setPassword("Guss2023");
+        usuario.setEmail("gussvill@example.com");
+        usuario.setPassword("Top2023");
 
         // define el comportamiento del repositorio
         when(UsuarioJpaRepository.save(any(Usuario.class))).thenReturn(usuario);
@@ -121,8 +117,8 @@ public class UsuarioRepositoryTest {
     @Test
     public void testUpdateToken() {
         // define los parámetros de prueba
-        String email = "johndoe@example.com";
-        String newToken = "1234567890";
+        String email = "gussvill@example.com";
+        String newToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ1MTAwMjAsInBhc3N3b3JkIjoiJDJhJDEwJEhaT2kvVlVyWW9QdVBJSmZlUHl4VGU2QmFjRU1uaEkyQ1pWaHJ6dkg0UGNEWXkxdjU1QlNPIn0.o-GEWRSjeAhKsI2k_xfWyEX_5r27-YLPCs8XYc2z8ao";
 
         // llama al método del servicio
         usuarioRepository.updateToken(email, newToken);
@@ -134,8 +130,8 @@ public class UsuarioRepositoryTest {
     @Test
     public void testUpdateLastLogin() {
         // Given
-        String email = "test@example.com";
-        String date = "2023-05-01";
+        String email = "gussvill@example.com";
+        String date = "may 19, 2023 11:22:00 AM";
 
         // When
         usuarioRepository.updateLastLogin(email, date);
@@ -143,6 +139,5 @@ public class UsuarioRepositoryTest {
         // Then
         verify(UsuarioJpaRepository).updateLastLogin(email, date);
     }
-
 
 }
