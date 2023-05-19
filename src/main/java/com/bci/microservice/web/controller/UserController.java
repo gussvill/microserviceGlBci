@@ -14,6 +14,7 @@ import com.bci.microservice.utils.MyAppProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -81,8 +82,8 @@ public class UserController {
             @ApiResponse(responseCode = "404", description = "Usuarios no encontrados", content = @Content)})
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
-    public List<Usuario> getUsers() {
-        return usuarioService.getUsers();
+    public ResponseEntity<List<Usuario>> getUsers() {
+        return new ResponseEntity<>(usuarioService.getUsers(), HttpStatus.OK);
     }
 
     /**
@@ -100,7 +101,7 @@ public class UserController {
     })
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
-    public ResponseEntity<UsuariosResponse> login(/*@Parameter(description = "Usuario para iniciar sesión")*/ @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody Usuario usuario, @RequestHeader("Authorization") String authHeader) {
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
