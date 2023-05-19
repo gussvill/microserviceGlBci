@@ -24,13 +24,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/sign-up",
+					"raw": "http://localhost:8081/bci-microservice/api/sign-up",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
+						"bci-microservice",
+						"api",
 						"sign-up"
 					]
 				}
@@ -48,7 +50,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ0MzQwODB9.nGKVIAZb8Z1bwL1YP0Zog7jazF5VEJa2aQHJL7CFtIM",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ1MTAwMjAsInBhc3N3b3JkIjoiJDJhJDEwJEhaT2kvVlVyWW9QdVBJSmZlUHl4VGU2QmFjRU1uaEkyQ1pWaHJ6dkg0UGNEWXkxdjU1QlNPIn0.o-GEWRSjeAhKsI2k_xfWyEX_5r27-YLPCs8XYc2z8ao",
 							"type": "string"
 						}
 					]
@@ -56,17 +58,19 @@
 				"method": "GET",
 				"header": [],
 				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
+					"mode": "raw",
+					"raw": ""
 				},
 				"url": {
-					"raw": "http://localhost:8081/users",
+					"raw": "http://localhost:8081/bci-microservice/api/users",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
+						"bci-microservice",
+						"api",
 						"users"
 					]
 				}
@@ -84,7 +88,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ0MzQwODB9.nGKVIAZb8Z1bwL1YP0Zog7jazF5VEJa2aQHJL7CFtIM",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ0NzkyNjAsInBhc3N3b3JkIjoiR3VzczIwMjAifQ.LS2UWLiD-jSksnXbfxFBx8lsQLCVAEiEuz3hc3CnYHo",
 							"type": "string"
 						}
 					]
@@ -93,7 +97,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"gussvill@gmail.com\"\n}\n",
+					"raw": "{\n    \"email\" : \"gussvill@gmail.com\",\n    \"password\" : \"Guss2020\"\n}\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,13 +105,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/login",
+					"raw": "http://localhost:8081/bci-microservice/api/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8081",
 					"path": [
+						"bci-microservice",
+						"api",
 						"login"
 					]
 				}
