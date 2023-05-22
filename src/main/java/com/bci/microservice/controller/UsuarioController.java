@@ -30,8 +30,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Este es el controlador que maneja solicitudes HTTP relacionadas con usuarios.
@@ -52,31 +54,23 @@ public class UsuarioController {
     private static final String INVALID_TOKEN = "Invalid or expired token";
     private static final String INVALID_LAST_LOGIN = "The user is not logged in yet. No Data!";
 
+    private final UsuarioJpaRepository usuarioJpaRepository;
+    private final UsuarioService usuarioService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtParser jwtParser;
+    private final RevokedTokenJpaRepository revokedTokenJpaRepository;
+    private final MyAppProperties myAppProperties;
 
     @Autowired
-    private UsuarioJpaRepository iUsuarioJpaRepository;
+    public UsuarioController(UsuarioJpaRepository usuarioJpaRepository, UsuarioService usuarioService, PasswordEncoder passwordEncoder, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, MyAppProperties myAppProperties) {
+        this.usuarioJpaRepository = usuarioJpaRepository;
+        this.usuarioService = usuarioService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtParser = jwtParser;
+        this.revokedTokenJpaRepository = revokedTokenJpaRepository;
+        this.myAppProperties = myAppProperties;
+    }
 
-    @Autowired
-    private UsuarioService usuarioService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtParser jwtParser;
-
-    @Autowired
-    private RevokedTokenJpaRepository IRevokedTokenJpaRepository;
-
-    @Autowired
-    private MyAppProperties myAppProperties;
-
-
-    /**
-     * Gets users.
-     *
-     * @return the users
-     */
     @Operation(summary = "Obtener todos los usuarios")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Se encontraron los usuarios", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Usuario.class))}),
@@ -84,16 +78,10 @@ public class UsuarioController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
     public ResponseEntity<List<Usuario>> getUsers() {
-        return new ResponseEntity<>(usuarioService.getUsers(), HttpStatus.OK);
+        List<Usuario> users = usuarioService.getUsers().stream().sorted(Comparator.comparing(Usuario::getEmail)).collect(Collectors.toList());
+        return ResponseEntity.ok(users);
     }
 
-    /**
-     * Login response entity.
-     *
-     * @param usuario    the usuario
-     * @param authHeader the auth header
-     * @return the response entity
-     */
     @Operation(summary = "Iniciar sesión de usuario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "202", description = "Inicio de sesión exitoso", content = @Content(schema = @Schema(implementation = UsuariosResponse.class))),
@@ -103,15 +91,14 @@ public class UsuarioController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
     public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody LoginUsuarioRequest loginRequest, @RequestHeader("Authorization") String authHeader) {
-
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioService.getUserByEmail(loginRequest.getEmail());
 
         try {
-            if (usuarioList.isPresent()) {
+            return usuarioList.map(usuario -> {
                 jwtParser.parseClaimsJws(token).getBody();
                 usuarioService.updateLastLogin(loginRequest.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
-                IRevokedTokenJpaRepository.save(new RevokedToken(token));
+                revokedTokenJpaRepository.save(new RevokedToken(token));
 
                 Usuario updatedUser = usuarioService.getUserByEmail(loginRequest.getEmail(), null);
                 String newToken = TokenUtils.createToken(loginRequest.getEmail(), loginRequest.getPassword(), myAppProperties.getExpirationTokenMs());
@@ -129,16 +116,12 @@ public class UsuarioController {
                 usuariosResponse.setPassword(updatedUser.getPassword());
                 usuariosResponse.setPhones(updatedUser.getListPhones());
 
-                return new ResponseEntity<>(usuariosResponse, HttpStatus.ACCEPTED);
-
-            } else {
-                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS);
-            }
+                return ResponseEntity.accepted().body(usuariosResponse);
+            }).orElseThrow(() -> new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS));
 
         } catch (JwtException e) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_TOKEN);
         }
-
     }
 
     /**
@@ -153,7 +136,6 @@ public class UsuarioController {
             @ApiResponse(responseCode = "400", description = "Datos inválidos ingresados o el usuario ya existe", content = @Content)})
     @PostMapping("/sign-up")
     public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
-
         try {
 
             Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
@@ -170,7 +152,7 @@ public class UsuarioController {
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
                 usuario.setPhonesAsJson(usuario.getPhones());
-                Usuario usuarioSave = iUsuarioJpaRepository.save(usuario);
+                Usuario usuarioSave = usuarioJpaRepository.save(usuario);
 
                 UsuarioSignUpResponse usuarioSignUpResponse = new UsuarioSignUpResponse();
                 usuarioSignUpResponse.setId(usuarioSave.getId());
@@ -186,9 +168,7 @@ public class UsuarioController {
         } catch (Exception e) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_DATA);
         }
-
     }
-
 }
 
 /*
