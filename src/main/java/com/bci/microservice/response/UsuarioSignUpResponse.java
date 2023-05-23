@@ -1,10 +1,12 @@
 package com.bci.microservice.response;
 
+import com.bci.microservice.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
@@ -22,4 +24,9 @@ public class UsuarioSignUpResponse {
     private String token;
     @JsonProperty("isActive")
     private boolean isActive;
+    private static ModelMapper modelMapper = new ModelMapper();
+
+    public static UsuarioSignUpResponse convertToUsuarioSignUpResponse(Usuario usuario) {
+        return modelMapper.map(usuario, UsuarioSignUpResponse.class);
+    }
 }

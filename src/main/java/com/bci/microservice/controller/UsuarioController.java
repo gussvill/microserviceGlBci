@@ -7,8 +7,8 @@ import com.bci.microservice.exceptions.InputValidationException;
 import com.bci.microservice.repository.RevokedTokenJpaRepository;
 import com.bci.microservice.repository.UsuarioJpaRepository;
 import com.bci.microservice.request.LoginUsuarioRequest;
+import com.bci.microservice.response.UsuarioResponse;
 import com.bci.microservice.response.UsuarioSignUpResponse;
-import com.bci.microservice.response.UsuariosResponse;
 import com.bci.microservice.security.TokenUtils;
 import com.bci.microservice.service.UsuarioService;
 import com.bci.microservice.utils.DateUtils;
@@ -35,6 +35,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 
 /**
  * Este es el controlador que maneja solicitudes HTTP relacionadas con usuarios.
@@ -78,13 +79,13 @@ public class UsuarioController {
 
     @Operation(summary = "Iniciar sesión de usuario")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "202", description = "Inicio de sesión exitoso", content = @Content(schema = @Schema(implementation = UsuariosResponse.class))),
+            @ApiResponse(responseCode = "202", description = "Inicio de sesión exitoso", content = @Content(schema = @Schema(implementation = UsuarioResponse.class))),
             @ApiResponse(responseCode = "400", description = "Token inválido o usuario no existente", content = @Content),
             @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content)
     })
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
-    public ResponseEntity<UsuariosResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody LoginUsuarioRequest loginRequest, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuarioResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody LoginUsuarioRequest loginRequest, @RequestHeader("Authorization") String authHeader) {
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         Optional<Usuario> usuarioList = usuarioService.getUserByEmail(loginRequest.getEmail());
 
@@ -98,19 +99,9 @@ public class UsuarioController {
                 String newToken = TokenUtils.createToken(loginRequest.getEmail(), loginRequest.getPassword(), myAppProperties.getExpirationTokenMs());
                 usuarioService.updateToken(loginRequest.getEmail(), newToken);
                 updatedUser.setToken(newToken);
+                UsuarioResponse usuarioResponse = UsuarioResponse.convertToUsuarioResponse(updatedUser);
 
-                UsuariosResponse usuariosResponse = new UsuariosResponse();
-                usuariosResponse.setId(updatedUser.getId());
-                usuariosResponse.setCreated(updatedUser.getCreated());
-                usuariosResponse.setLastLogin(updatedUser.getLastLogin());
-                usuariosResponse.setToken(updatedUser.getToken());
-                usuariosResponse.setActive(updatedUser.isActive());
-                usuariosResponse.setName(updatedUser.getName());
-                usuariosResponse.setEmail(updatedUser.getEmail());
-                usuariosResponse.setPassword(updatedUser.getPassword());
-                usuariosResponse.setPhones(updatedUser.getListPhones());
-
-                return ResponseEntity.accepted().body(usuariosResponse);
+                return ResponseEntity.accepted().body(usuarioResponse);
             }).orElseThrow(() -> new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_NOT_EXISTS.getMessage()));
 
         } catch (JwtException e) {
@@ -147,13 +138,7 @@ public class UsuarioController {
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
                 usuario.setPhonesAsJson(usuario.getPhones());
                 Usuario usuarioSave = usuarioJpaRepository.save(usuario);
-
-                UsuarioSignUpResponse usuarioSignUpResponse = new UsuarioSignUpResponse();
-                usuarioSignUpResponse.setId(usuarioSave.getId());
-                usuarioSignUpResponse.setCreated(usuarioSave.getCreated());
-                usuarioSignUpResponse.setLastLogin(usuarioSave.getLastLogin());
-                usuarioSignUpResponse.setToken(usuarioSave.getToken());
-                usuarioSignUpResponse.setActive(usuarioSave.isActive());
+                UsuarioSignUpResponse usuarioSignUpResponse = UsuarioSignUpResponse.convertToUsuarioSignUpResponse(usuarioSave);
 
                 return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
             } else {
