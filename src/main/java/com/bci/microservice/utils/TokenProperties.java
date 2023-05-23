@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
  * clase MyAppProperties permite a la aplicación de Spring leer y exponer propiedades de configuración específicas, como el formato de fecha y el tiempo de expiración de un token.
  */
 @Component
-public class MyAppProperties {
+public class TokenProperties {
 
     @Value("${myapp.formatDate}")
     private String formatDate;
@@ -58,7 +58,7 @@ public class MyAppProperties {
      */
     @Override
     public String toString() {
-        return "MyAppProperties{" +
+        return "TokenProperties{" +
                 "formatDate='" + formatDate + '\'' +
                 ", expirationDateMs=" + expirationTokenMs +
                 '}';

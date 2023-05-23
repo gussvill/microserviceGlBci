@@ -1,6 +1,6 @@
 package com.bci.microservice.security;
 
-import com.bci.microservice.utils.MyAppProperties;
+import com.bci.microservice.utils.TokenProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,16 +22,16 @@ import java.util.Collections;
 @Component
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private final MyAppProperties myAppProperties;
+    private final TokenProperties tokenProperties;
 
     /**
      * Instantiates a new Jwt authentication filter.
      *
      * @param authenticationManager the authentication manager
-     * @param myAppProperties       the my app properties
+     * @param tokenProperties       the my app properties
      */
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, MyAppProperties myAppProperties) {
-        this.myAppProperties = myAppProperties;
+    public JWTAuthenticationFilter(AuthenticationManager authenticationManager, TokenProperties tokenProperties) {
+        this.tokenProperties = tokenProperties;
         super.setAuthenticationManager(authenticationManager);
     }
 
@@ -80,7 +80,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authResult.getPrincipal();
-        String token = TokenUtils.createToken(userDetails.getEmail(), userDetails.getPassword(), myAppProperties.getExpirationTokenMs());
+        String token = TokenUtils.createToken(userDetails.getEmail(), userDetails.getPassword(), tokenProperties.getExpirationTokenMs());
 
         response.addHeader("Authorization", "Bearer " + token);
         response.getWriter().flush();

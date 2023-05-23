@@ -11,8 +11,9 @@ import com.bci.microservice.response.UsuarioResponse;
 import com.bci.microservice.response.UsuarioSignUpResponse;
 import com.bci.microservice.security.TokenUtils;
 import com.bci.microservice.service.UsuarioService;
+import com.bci.microservice.tokens.RevokedTokenFactory;
 import com.bci.microservice.utils.DateUtils;
-import com.bci.microservice.utils.MyAppProperties;
+import com.bci.microservice.utils.TokenProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,16 +55,16 @@ public class UsuarioController {
     private final PasswordEncoder passwordEncoder;
     private final JwtParser jwtParser;
     private final RevokedTokenJpaRepository revokedTokenJpaRepository;
-    private final MyAppProperties myAppProperties;
+    private final TokenProperties tokenProperties;
 
     @Autowired
-    public UsuarioController(UsuarioJpaRepository usuarioJpaRepository, UsuarioService usuarioService, PasswordEncoder passwordEncoder, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, MyAppProperties myAppProperties) {
+    public UsuarioController(UsuarioJpaRepository usuarioJpaRepository, UsuarioService usuarioService, PasswordEncoder passwordEncoder, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, TokenProperties tokenProperties) {
         this.usuarioJpaRepository = usuarioJpaRepository;
         this.usuarioService = usuarioService;
         this.passwordEncoder = passwordEncoder;
         this.jwtParser = jwtParser;
         this.revokedTokenJpaRepository = revokedTokenJpaRepository;
-        this.myAppProperties = myAppProperties;
+        this.tokenProperties = tokenProperties;
     }
 
     @Operation(summary = "Obtener todos los usuarios")
@@ -92,11 +93,11 @@ public class UsuarioController {
         try {
             return usuarioList.map(usuario -> {
                 jwtParser.parseClaimsJws(token).getBody();
-                usuarioService.updateLastLogin(loginRequest.getEmail(), DateUtils.formattedDate(myAppProperties.getFormatDate()));
-                revokedTokenJpaRepository.save(new RevokedToken(token));
+                usuarioService.updateLastLogin(loginRequest.getEmail(), DateUtils.formattedDate(tokenProperties.getFormatDate()));
+                revokedTokenJpaRepository.save(RevokedTokenFactory.createRevokedToken(token));
 
                 Usuario updatedUser = usuarioService.getUserByEmail(loginRequest.getEmail(), null);
-                String newToken = TokenUtils.createToken(loginRequest.getEmail(), loginRequest.getPassword(), myAppProperties.getExpirationTokenMs());
+                String newToken = TokenUtils.createToken(loginRequest.getEmail(), loginRequest.getPassword(), tokenProperties.getExpirationTokenMs());
                 usuarioService.updateToken(loginRequest.getEmail(), newToken);
                 updatedUser.setToken(newToken);
                 UsuarioResponse usuarioResponse = UsuarioResponse.convertToUsuarioResponse(updatedUser);
@@ -131,9 +132,9 @@ public class UsuarioController {
                 }
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-                usuario.setCreated(DateUtils.formattedDate(myAppProperties.getFormatDate()));
+                usuario.setCreated(DateUtils.formattedDate(tokenProperties.getFormatDate()));
                 usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
-                usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
+                usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), tokenProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
                 usuario.setPhonesAsJson(usuario.getPhones());
