@@ -4,6 +4,7 @@ import com.bci.microservice.entity.Usuario;
 import com.bci.microservice.repository.UsuarioJpaRepository;
 import com.bci.microservice.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public class UsuarioService implements UsuarioRepository {
 
     @Autowired
     private UsuarioJpaRepository usuarioJpaRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public Optional<Usuario> getUserByEmail(String email) {
@@ -43,5 +47,10 @@ public class UsuarioService implements UsuarioRepository {
     @Override
     public void updateLastLogin(String email, String date) {
         usuarioJpaRepository.updateLastLogin(email, date);
+    }
+
+    @Override
+    public String passwordEncoder(String userPassword) {
+        return passwordEncoder.encode(userPassword);
     }
 }

@@ -6,7 +6,6 @@ import com.bci.microservice.enums.ErrorMessages;
 import com.bci.microservice.exceptions.InputValidationException;
 import com.bci.microservice.repository.RevokedTokenJpaRepository;
 import com.bci.microservice.repository.UsuarioJpaRepository;
-import com.bci.microservice.request.LoginUsuarioRequest;
 import com.bci.microservice.response.UsuarioResponse;
 import com.bci.microservice.response.UsuarioSignUpResponse;
 import com.bci.microservice.security.TokenUtils;
@@ -50,7 +49,6 @@ import java.util.stream.Collectors;
  */
 public class UsuarioController {
 
-    private final UsuarioJpaRepository usuarioJpaRepository;
     private final UsuarioService usuarioService;
     private final PasswordEncoder passwordEncoder;
     private final JwtParser jwtParser;
@@ -58,8 +56,7 @@ public class UsuarioController {
     private final TokenProperties tokenProperties;
 
     @Autowired
-    public UsuarioController(UsuarioJpaRepository usuarioJpaRepository, UsuarioService usuarioService, PasswordEncoder passwordEncoder, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, TokenProperties tokenProperties) {
-        this.usuarioJpaRepository = usuarioJpaRepository;
+    public UsuarioController(UsuarioService usuarioService, PasswordEncoder passwordEncoder, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, TokenProperties tokenProperties) {
         this.usuarioService = usuarioService;
         this.passwordEncoder = passwordEncoder;
         this.jwtParser = jwtParser;
@@ -86,19 +83,22 @@ public class UsuarioController {
     })
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
-    public ResponseEntity<UsuarioResponse> login(@Parameter(description = "Usuario para iniciar sesión") @Valid @RequestBody LoginUsuarioRequest loginRequest, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<UsuarioResponse> login(@RequestHeader("Authorization") String authHeader) {
+
         String token = authHeader.substring(7); // Remove "Bearer " prefix
-        Optional<Usuario> usuarioList = usuarioService.getUserByEmail(loginRequest.getEmail());
+        String emailByToken = TokenUtils.getEmailByToken(token);
+        String passwordByToken = TokenUtils.getPasswordByToken(token);
+        Optional<Usuario> usuarioList = usuarioService.getUserByEmail(emailByToken);
 
         try {
             return usuarioList.map(usuario -> {
                 jwtParser.parseClaimsJws(token).getBody();
-                usuarioService.updateLastLogin(loginRequest.getEmail(), DateUtils.formattedDate(tokenProperties.getFormatDate()));
+                usuarioService.updateLastLogin(emailByToken, DateUtils.formattedDate(tokenProperties.getFormatDate()));
                 revokedTokenJpaRepository.save(RevokedTokenFactory.createRevokedToken(token));
 
-                Usuario updatedUser = usuarioService.getUserByEmail(loginRequest.getEmail(), null);
-                String newToken = TokenUtils.createToken(loginRequest.getEmail(), loginRequest.getPassword(), tokenProperties.getExpirationTokenMs());
-                usuarioService.updateToken(loginRequest.getEmail(), newToken);
+                Usuario updatedUser = usuarioService.getUserByEmail(emailByToken, null);
+                String newToken = TokenUtils.createToken(emailByToken, passwordByToken, tokenProperties.getExpirationTokenMs());
+                usuarioService.updateToken(emailByToken, newToken);
                 updatedUser.setToken(newToken);
                 UsuarioResponse usuarioResponse = UsuarioResponse.convertToUsuarioResponse(updatedUser);
 
@@ -122,6 +122,7 @@ public class UsuarioController {
             @ApiResponse(responseCode = "400", description = "Datos inválidos ingresados o el usuario ya existe", content = @Content)})
     @PostMapping("/sign-up")
     public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
+
         try {
 
             Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
@@ -131,14 +132,14 @@ public class UsuarioController {
                     throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_PASSWORD.getMessage());
                 }
 
-                usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+                usuario.setPassword(usuarioService.passwordEncoder(usuario.getPassword()));
                 usuario.setCreated(DateUtils.formattedDate(tokenProperties.getFormatDate()));
                 usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), tokenProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
                 usuario.setPhonesAsJson(usuario.getPhones());
-                Usuario usuarioSave = usuarioJpaRepository.save(usuario);
+                Usuario usuarioSave = usuarioService.save(usuario);
                 UsuarioSignUpResponse usuarioSignUpResponse = UsuarioSignUpResponse.convertToUsuarioSignUpResponse(usuarioSave);
 
                 return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);

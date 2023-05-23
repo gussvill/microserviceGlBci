@@ -58,4 +58,6 @@ public interface UsuarioRepository {
      * @param date  the date
      */
     void updateLastLogin(String email, String date);
+
+    String passwordEncoder(String userPassword);
 }

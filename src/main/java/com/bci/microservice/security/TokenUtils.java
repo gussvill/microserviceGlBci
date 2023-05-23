@@ -52,18 +52,30 @@ public class TokenUtils {
      */
     public static UsernamePasswordAuthenticationToken getAuthentication(String token) {
         try {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-            String email = claims.getSubject();
-
+            String email = getEmailByToken(token);
             return new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
         } catch (JwtException e) {
             return null;
         }
+    }
+
+    public static String getEmailByToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.getSubject();
+    }
+
+    public static String getPasswordByToken(String token) {
+        Claims claims = getClaims(token);
+        String email = claims.get("password", String.class);
+        return email;
+    }
+
+    private static Claims getClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 }

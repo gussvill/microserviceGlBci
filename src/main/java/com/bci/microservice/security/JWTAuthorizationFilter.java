@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private RevokedTokenJpaRepository IRevokedTokenJpaRepository;
+    private RevokedTokenJpaRepository revokedTokenJpaRepository;
 
 
     /**
@@ -55,7 +55,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePAT);
 
                 String tokenB = request.getHeader("Authorization").substring(7);
-                if (IRevokedTokenJpaRepository.existsByToken(tokenB)) {
+                if (revokedTokenJpaRepository.existsByToken(tokenB)) {
                     throw new CustomException("Token has been revoked", "{\"error\": \"Token has been revoked\"}");
                 }
 
@@ -66,7 +66,6 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             response.getWriter().write(e.getMessage());
             return;
         }
-
 
         filterChain.doFilter(request, response);
 
