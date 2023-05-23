@@ -1,4 +1,4 @@
-package com.bci.microservice.security;
+package com.bci.microservice.dto;
 
 import lombok.Data;
 

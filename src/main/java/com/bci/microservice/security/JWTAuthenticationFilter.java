@@ -1,5 +1,6 @@
 package com.bci.microservice.security;
 
+import com.bci.microservice.dto.AuthCredentials;
 import com.bci.microservice.tokens.TokenProperties;
 import com.bci.microservice.tokens.TokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
