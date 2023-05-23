@@ -50,7 +50,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ1MTAwMjAsInBhc3N3b3JkIjoiJDJhJDEwJEhaT2kvVlVyWW9QdVBJSmZlUHl4VGU2QmFjRU1uaEkyQ1pWaHJ6dkg0UGNEWXkxdjU1QlNPIn0.o-GEWRSjeAhKsI2k_xfWyEX_5r27-YLPCs8XYc2z8ao",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ4NzA0MjQsInBhc3N3b3JkIjoiJDJhJDEwJENlUWdKWlZHQ3BzMkcwbEpsTk1jbWVkd1luN1R6VUdYeGd1WEdVUW82QXdJRXlQbDZWRXQ2In0.Roj8-uRkGKBTic49qJ9vpAiD_Iicxn4eUnIx3mdX7_Q",
 							"type": "string"
 						}
 					]
@@ -88,7 +88,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ0NzkyNjAsInBhc3N3b3JkIjoiR3VzczIwMjAifQ.LS2UWLiD-jSksnXbfxFBx8lsQLCVAEiEuz3hc3CnYHo",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ4NzA0MzcsInBhc3N3b3JkIjoiJDJhJDEwJENlUWdKWlZHQ3BzMkcwbEpsTk1jbWVkd1luN1R6VUdYeGd1WEdVUW82QXdJRXlQbDZWRXQ2In0.6TKVtPmbetX6XYH48LhNIF1lC7Ep9xEcMqjnjZ25L5s",
 							"type": "string"
 						}
 					]
@@ -97,7 +97,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"email\" : \"gussvill@gmail.com\",\n    \"password\" : \"Guss2020\"\n}\n",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
