@@ -1,6 +1,6 @@
 package com.bci.microservice.tokens;
 
-import com.bci.microservice.entity.RevokedToken;
+import com.bci.microservice.entities.RevokedToken;
 
 public class RevokedTokenFactory {
     public static RevokedToken createRevokedToken(String token) {

@@ -1,6 +1,6 @@
 package com.bci.microservice.interfaces.repositories;
 
-import com.bci.microservice.entity.Usuario;
+import com.bci.microservice.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

@@ -1,6 +1,7 @@
 package com.bci.microservice.security;
 
 import com.bci.microservice.tokens.TokenProperties;
+import com.bci.microservice.tokens.TokenUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,6 +1,6 @@
-package com.bci.microservice.service;
+package com.bci.microservice.services;
 
-import com.bci.microservice.entity.RevokedToken;
+import com.bci.microservice.entities.RevokedToken;
 import com.bci.microservice.interfaces.repositories.IRevokedTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

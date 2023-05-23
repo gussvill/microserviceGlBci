@@ -1,4 +1,4 @@
-package com.bci.microservice.entity;
+package com.bci.microservice.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

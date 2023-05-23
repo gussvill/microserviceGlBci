@@ -2,6 +2,7 @@ package com.bci.microservice.security;
 
 import com.bci.microservice.exceptions.CustomException;
 import com.bci.microservice.interfaces.repositories.IRevokedTokenRepository;
+import com.bci.microservice.tokens.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

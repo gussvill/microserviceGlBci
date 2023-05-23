@@ -1,4 +1,4 @@
-package com.bci.microservice.security;
+package com.bci.microservice.tokens;
 
 import com.bci.microservice.utils.DateUtils;
 import io.jsonwebtoken.Claims;

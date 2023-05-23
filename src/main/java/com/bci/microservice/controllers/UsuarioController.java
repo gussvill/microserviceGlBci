@@ -1,13 +1,13 @@
-package com.bci.microservice.controller;
+package com.bci.microservice.controllers;
 
-import com.bci.microservice.entity.Usuario;
+import com.bci.microservice.entities.Usuario;
 import com.bci.microservice.enums.ErrorMessages;
 import com.bci.microservice.exceptions.InputValidationException;
-import com.bci.microservice.response.UsuarioResponse;
-import com.bci.microservice.response.UsuarioSignUpResponse;
-import com.bci.microservice.security.TokenUtils;
-import com.bci.microservice.service.RevokedTokenService;
-import com.bci.microservice.service.UsuarioService;
+import com.bci.microservice.responses.UsuarioResponse;
+import com.bci.microservice.responses.UsuarioSignUpResponse;
+import com.bci.microservice.tokens.TokenUtils;
+import com.bci.microservice.services.RevokedTokenService;
+import com.bci.microservice.services.UsuarioService;
 import com.bci.microservice.tokens.RevokedTokenFactory;
 import com.bci.microservice.utils.DateUtils;
 import com.bci.microservice.tokens.TokenProperties;

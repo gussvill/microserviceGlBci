@@ -15,7 +15,7 @@ public interface IUsuario {
      * @param email the email
      * @return the user by email
      */
-    Optional<com.bci.microservice.entity.Usuario> getUserByEmail(String email);
+    Optional<com.bci.microservice.entities.Usuario> getUserByEmail(String email);
 
     /**
      * Gets user by email.
@@ -24,14 +24,14 @@ public interface IUsuario {
      * @param nullValue the null value
      * @return the user by email
      */
-    com.bci.microservice.entity.Usuario getUserByEmail(String email, String nullValue);
+    com.bci.microservice.entities.Usuario getUserByEmail(String email, String nullValue);
 
     /**
      * Gets users.
      *
      * @return the users
      */
-    List<com.bci.microservice.entity.Usuario> getUsers();
+    List<com.bci.microservice.entities.Usuario> getUsers();
 
     /**
      * Save usuario.
@@ -39,7 +39,7 @@ public interface IUsuario {
      * @param usuario the usuario
      * @return the usuario
      */
-    com.bci.microservice.entity.Usuario save(com.bci.microservice.entity.Usuario usuario);
+    com.bci.microservice.entities.Usuario save(com.bci.microservice.entities.Usuario usuario);
 
     /**
      * Update token.

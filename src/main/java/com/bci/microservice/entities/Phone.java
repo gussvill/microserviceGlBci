@@ -1,4 +1,4 @@
-package com.bci.microservice.entity;
+package com.bci.microservice.entities;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

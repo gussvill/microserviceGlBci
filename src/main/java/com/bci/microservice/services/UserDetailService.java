@@ -1,6 +1,6 @@
-package com.bci.microservice.service;
+package com.bci.microservice.services;
 
-import com.bci.microservice.entity.Usuario;
+import com.bci.microservice.entities.Usuario;
 import com.bci.microservice.interfaces.repositories.IUsuarioRepository;
 import com.bci.microservice.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;

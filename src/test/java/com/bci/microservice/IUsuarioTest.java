@@ -33,14 +33,14 @@ public class IUsuarioTest {
     public void testGetUserByEmailOptional() {
 
         // Crear los datos de prueba
-        com.bci.microservice.entity.Usuario usuario1 = new com.bci.microservice.entity.Usuario();
+        com.bci.microservice.entities.Usuario usuario1 = new com.bci.microservice.entities.Usuario();
         usuario1.setEmail("gussvill@example.com");
         usuario1.setPassword("Top2023");
 
-        com.bci.microservice.entity.Usuario usuario2 = new com.bci.microservice.entity.Usuario();
+        com.bci.microservice.entities.Usuario usuario2 = new com.bci.microservice.entities.Usuario();
         usuario2.setEmail("gussvill78@example.com");
         usuario2.setPassword("Top2024");
-        List<com.bci.microservice.entity.Usuario> usuarios = Arrays.asList(usuario1, usuario2);
+        List<com.bci.microservice.entities.Usuario> usuarios = Arrays.asList(usuario1, usuario2);
 
         // Establecer el comportamiento esperado del mock
         when(IUsuarioRepository.findByEmailContaining("test")).thenReturn(Optional.of(usuario1));
@@ -60,14 +60,14 @@ public class IUsuarioTest {
     public void testGetUserByEmail() {
         // Datos de prueba
         String email = "gussvill@example.com";
-        com.bci.microservice.entity.Usuario expectedUsuario = new com.bci.microservice.entity.Usuario();
+        com.bci.microservice.entities.Usuario expectedUsuario = new com.bci.microservice.entities.Usuario();
         expectedUsuario.setEmail(email);
 
         // Configurar el comportamiento del mock
         Mockito.when(IUsuarioRepository.findByEmail(email)).thenReturn(expectedUsuario);
 
         // Invocar al método a probar
-        com.bci.microservice.entity.Usuario actualUsuario = IUsuario.getUserByEmail(email, null);
+        com.bci.microservice.entities.Usuario actualUsuario = IUsuario.getUserByEmail(email, null);
 
         // Verificar el resultado
         Assertions.assertEquals(expectedUsuario, actualUsuario);
@@ -77,20 +77,20 @@ public class IUsuarioTest {
     @Test
     public void testGetUsers() {
 
-        com.bci.microservice.entity.Usuario usuario = new com.bci.microservice.entity.Usuario();
+        com.bci.microservice.entities.Usuario usuario = new com.bci.microservice.entities.Usuario();
         usuario.setEmail("gussvill@example.com");
         usuario.setPassword("Top2023");
 
-        com.bci.microservice.entity.Usuario usuario2 = new com.bci.microservice.entity.Usuario();
+        com.bci.microservice.entities.Usuario usuario2 = new com.bci.microservice.entities.Usuario();
         usuario.setEmail("gussvill78@example.com");
         usuario.setPassword("Top2024");
 
         // Given
-        List<com.bci.microservice.entity.Usuario> expectedUsuarios = Arrays.asList(usuario, usuario2);
+        List<com.bci.microservice.entities.Usuario> expectedUsuarios = Arrays.asList(usuario, usuario2);
         when(IUsuarioRepository.findAll()).thenReturn(expectedUsuarios);
 
         // When
-        List<com.bci.microservice.entity.Usuario> actualUsuarios = usuario.getUsers();
+        List<com.bci.microservice.entities.Usuario> actualUsuarios = usuario.getUsers();
 
         // Then
         assertEquals(expectedUsuarios, actualUsuarios);
@@ -100,15 +100,15 @@ public class IUsuarioTest {
     @Test
     public void testSaveUser() {
         // crea un usuario de prueba
-        com.bci.microservice.entity.Usuario usuario = new com.bci.microservice.entity.Usuario();
+        com.bci.microservice.entities.Usuario usuario = new com.bci.microservice.entities.Usuario();
         usuario.setEmail("gussvill@example.com");
         usuario.setPassword("Top2023");
 
         // define el comportamiento del repositorio
-        when(IUsuarioRepository.save(any(com.bci.microservice.entity.Usuario.class))).thenReturn(usuario);
+        when(IUsuarioRepository.save(any(com.bci.microservice.entities.Usuario.class))).thenReturn(usuario);
 
         // llama al método del servicio y verifica el resultado
-        com.bci.microservice.entity.Usuario result = usuario.save(usuario);
+        com.bci.microservice.entities.Usuario result = usuario.save(usuario);
         verify(IUsuarioRepository, times(1)).save(usuario);
         assertEquals(usuario, result);
     }

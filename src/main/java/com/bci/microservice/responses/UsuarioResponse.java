@@ -1,6 +1,6 @@
-package com.bci.microservice.response;
+package com.bci.microservice.responses;
 
-import com.bci.microservice.entity.Usuario;
+import com.bci.microservice.entities.Usuario;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
