@@ -1,5 +1,6 @@
-package com.bci.microservice.security;
+package com.bci.microservice.config;
 
+import com.bci.microservice.security.JWTAuthorizationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @AllArgsConstructor
-public class WebSecurityConfig {
+public class ApiSecurityConfig {
 
     private final UserDetailsService userDetailsService;
     private final JWTAuthorizationFilter jwtAuthorizationFilter;

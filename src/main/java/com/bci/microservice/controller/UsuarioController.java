@@ -26,7 +26,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,15 +49,13 @@ import java.util.stream.Collectors;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    private final PasswordEncoder passwordEncoder;
     private final JwtParser jwtParser;
     private final RevokedTokenJpaRepository revokedTokenJpaRepository;
     private final TokenProperties tokenProperties;
 
     @Autowired
-    public UsuarioController(UsuarioService usuarioService, PasswordEncoder passwordEncoder, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, TokenProperties tokenProperties) {
+    public UsuarioController(UsuarioService usuarioService, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, TokenProperties tokenProperties) {
         this.usuarioService = usuarioService;
-        this.passwordEncoder = passwordEncoder;
         this.jwtParser = jwtParser;
         this.revokedTokenJpaRepository = revokedTokenJpaRepository;
         this.tokenProperties = tokenProperties;

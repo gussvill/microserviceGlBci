@@ -22,9 +22,6 @@ public class EncryptDecryptPwd {
     public static void main(String[] args) {
         encryptKey(DB_USERNAME);
         encryptKey(DB_PWD);
-
-//        decryptKey("ENC(LTuzsowYJ7DHzacC0mkGNg==)");
-//        decryptKey("ENC(NBX2RHYV6K3Gf1eHI93Xad1FwdN0ED9u)");
     }
 
     /**
