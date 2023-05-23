@@ -1,6 +1,6 @@
-package com.bci.microservice.persistence.jpa;
+package com.bci.microservice.repository;
 
-import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

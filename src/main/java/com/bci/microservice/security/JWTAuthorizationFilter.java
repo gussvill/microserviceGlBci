@@ -1,7 +1,7 @@
 package com.bci.microservice.security;
 
 import com.bci.microservice.exceptions.CustomException;
-import com.bci.microservice.persistence.jpa.RevokedTokenJpaRepository;
+import com.bci.microservice.repository.RevokedTokenJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

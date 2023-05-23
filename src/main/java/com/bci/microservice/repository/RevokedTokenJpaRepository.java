@@ -1,6 +1,6 @@
-package com.bci.microservice.persistence.jpa;
+package com.bci.microservice.repository;
 
-import com.bci.microservice.persistence.entity.RevokedToken;
+import com.bci.microservice.entity.RevokedToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

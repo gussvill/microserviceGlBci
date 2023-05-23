@@ -1,4 +1,4 @@
-package com.bci.microservice.persistence.entity;
+package com.bci.microservice.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

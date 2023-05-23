@@ -1,4 +1,4 @@
-package com.bci.microservice.persistence.entity;
+package com.bci.microservice.entity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,6 +73,7 @@ public class Usuario {
     public void setListPhones(String listPhones) {
         this.listPhones = listPhones;
     }
+
     @Schema(hidden = true)
     public void setPhonesAsJson(Set<Phone> phones) {
         ObjectMapper objectMapper = new ObjectMapper();

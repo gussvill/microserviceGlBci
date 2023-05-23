@@ -1,8 +1,8 @@
 package com.bci.microservice;
 
-import com.bci.microservice.domain.repository.UsuarioRepository;
-import com.bci.microservice.persistence.jpa.UsuarioJpaRepository;
-import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.repository.UsuarioRepository;
+import com.bci.microservice.repository.UsuarioJpaRepository;
+import com.bci.microservice.entity.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

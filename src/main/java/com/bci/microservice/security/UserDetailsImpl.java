@@ -1,6 +1,6 @@
 package com.bci.microservice.security;
 
-import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.entity.Usuario;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

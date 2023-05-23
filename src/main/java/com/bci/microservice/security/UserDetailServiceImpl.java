@@ -1,7 +1,7 @@
 package com.bci.microservice.security;
 
-import com.bci.microservice.persistence.jpa.UsuarioJpaRepository;
-import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.entity.Usuario;
+import com.bci.microservice.repository.UsuarioJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,6 +1,6 @@
-package com.bci.microservice.domain.repository;
+package com.bci.microservice.repository;
 
-import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.entity.Usuario;
 
 import java.util.List;
 import java.util.Optional;

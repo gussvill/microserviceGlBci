@@ -1,15 +1,16 @@
 package com.bci.microservice.controller;
 
-import com.bci.microservice.domain.service.UsuarioService;
+import com.bci.microservice.entity.RevokedToken;
+import com.bci.microservice.entity.Usuario;
+import com.bci.microservice.enums.ErrorMessages;
 import com.bci.microservice.exceptions.InputValidationException;
-import com.bci.microservice.persistence.jpa.RevokedTokenJpaRepository;
-import com.bci.microservice.persistence.jpa.UsuarioJpaRepository;
-import com.bci.microservice.persistence.entity.RevokedToken;
-import com.bci.microservice.persistence.entity.Usuario;
+import com.bci.microservice.repository.RevokedTokenJpaRepository;
+import com.bci.microservice.repository.UsuarioJpaRepository;
 import com.bci.microservice.request.LoginUsuarioRequest;
 import com.bci.microservice.response.UsuarioSignUpResponse;
 import com.bci.microservice.response.UsuariosResponse;
 import com.bci.microservice.security.TokenUtils;
+import com.bci.microservice.service.UsuarioService;
 import com.bci.microservice.utils.DateUtils;
 import com.bci.microservice.utils.MyAppProperties;
 import io.jsonwebtoken.JwtException;
@@ -46,13 +47,6 @@ import java.util.stream.Collectors;
  * Date and Time API: The Date and Time API provides classes to represent dates, times and periods in Java 1.8.
  */
 public class UsuarioController {
-
-    private static final String INVALID_USER_EXISTS = "The entered user already exists, please enter a different user.";
-    private static final String INVALID_USER_NOT_EXISTS = "The entered user does not exist, please register a new user.";
-    private static final String INVALID_DATA = "Check the data entered in the contract.";
-    private static final String INVALID_PASSWORD = "Invalid password.";
-    private static final String INVALID_TOKEN = "Invalid or expired token";
-    private static final String INVALID_LAST_LOGIN = "The user is not logged in yet. No Data!";
 
     private final UsuarioJpaRepository usuarioJpaRepository;
     private final UsuarioService usuarioService;
@@ -117,10 +111,10 @@ public class UsuarioController {
                 usuariosResponse.setPhones(updatedUser.getListPhones());
 
                 return ResponseEntity.accepted().body(usuariosResponse);
-            }).orElseThrow(() -> new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_NOT_EXISTS));
+            }).orElseThrow(() -> new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_NOT_EXISTS.getMessage()));
 
         } catch (JwtException e) {
-            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_TOKEN);
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_TOKEN.getMessage());
         }
     }
 
@@ -142,12 +136,12 @@ public class UsuarioController {
 
             if (!usuarioList.isPresent()) {
                 if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
-                    throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_PASSWORD);
+                    throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_PASSWORD.getMessage());
                 }
 
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
                 usuario.setCreated(DateUtils.formattedDate(myAppProperties.getFormatDate()));
-                usuario.setLastLogin(INVALID_LAST_LOGIN);
+                usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
                 usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), myAppProperties.getExpirationTokenMs()));
                 usuario.setActive(true);
                 usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
@@ -163,10 +157,10 @@ public class UsuarioController {
 
                 return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
             } else {
-                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_USER_EXISTS);
+                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_EXISTS.getMessage());
             }
         } catch (Exception e) {
-            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), INVALID_DATA);
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_DATA.getMessage());
         }
     }
 }
