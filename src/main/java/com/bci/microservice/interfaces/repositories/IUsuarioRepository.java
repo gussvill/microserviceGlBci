@@ -1,4 +1,4 @@
-package com.bci.microservice.repository;
+package com.bci.microservice.interfaces.repositories;
 
 import com.bci.microservice.entity.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * La interfaz `UsuarioRepository` es una interfaz de repositorio que se utiliza para interactuar con los datos de usuario en una aplicación.
  */
-public interface UsuarioJpaRepository extends JpaRepository<Usuario, Long> {
+public interface IUsuarioRepository extends JpaRepository<Usuario, Long> {
 
     /**
      * Find by email containing optional.

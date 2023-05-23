@@ -1,8 +1,7 @@
 package com.bci.microservice.service;
 
-import com.bci.microservice.entity.Usuario;
-import com.bci.microservice.repository.UsuarioJpaRepository;
-import com.bci.microservice.repository.UsuarioRepository;
+import com.bci.microservice.interfaces.IUsuario;
+import com.bci.microservice.interfaces.repositories.IUsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,42 +10,42 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioService implements UsuarioRepository {
+public class UsuarioService implements IUsuario {
 
     @Autowired
-    private UsuarioJpaRepository usuarioJpaRepository;
+    private IUsuarioRepository IUsuarioRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Optional<Usuario> getUserByEmail(String email) {
-        return usuarioJpaRepository.findByEmailContaining(email);
+    public Optional<com.bci.microservice.entity.Usuario> getUserByEmail(String email) {
+        return IUsuarioRepository.findByEmailContaining(email);
     }
 
     @Override
-    public Usuario getUserByEmail(String email, String nullValue) {
-        return usuarioJpaRepository.findByEmail(email);
+    public com.bci.microservice.entity.Usuario getUserByEmail(String email, String nullValue) {
+        return IUsuarioRepository.findByEmail(email);
     }
 
     @Override
-    public List<Usuario> getUsers() {
-        return usuarioJpaRepository.findAll();
+    public List<com.bci.microservice.entity.Usuario> getUsers() {
+        return IUsuarioRepository.findAll();
     }
 
     @Override
-    public Usuario save(Usuario usuario) {
-        return usuarioJpaRepository.save(usuario);
+    public com.bci.microservice.entity.Usuario save(com.bci.microservice.entity.Usuario usuario) {
+        return IUsuarioRepository.save(usuario);
     }
 
     @Override
     public void updateToken(String email, String newToken) {
-        usuarioJpaRepository.updateToken(email, newToken);
+        IUsuarioRepository.updateToken(email, newToken);
     }
 
     @Override
     public void updateLastLogin(String email, String date) {
-        usuarioJpaRepository.updateLastLogin(email, date);
+        IUsuarioRepository.updateLastLogin(email, date);
     }
 
     @Override

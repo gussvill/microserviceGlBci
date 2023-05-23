@@ -1,18 +1,18 @@
-package com.bci.microservice.utils;
+package com.bci.microservice.tokens;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
- * clase MyAppProperties permite a la aplicación de Spring leer y exponer propiedades de configuración específicas, como el formato de fecha y el tiempo de expiración de un token.
+ * clase TokenProperties permite a la aplicación de Spring leer y exponer propiedades de configuración específicas, como el formato de fecha y el tiempo de expiración de un token.
  */
 @Component
 public class TokenProperties {
 
-    @Value("${myapp.formatDate}")
+    @Value("${token-properties.formatDate}")
     private String formatDate;
 
-    @Value("${myapp.expirationTokenMs}")
+    @Value("${token-properties.expirationTokenMs}")
     private int expirationTokenMs;
 
     /**

@@ -1,22 +1,19 @@
 package com.bci.microservice.controller;
 
-import com.bci.microservice.entity.RevokedToken;
 import com.bci.microservice.entity.Usuario;
 import com.bci.microservice.enums.ErrorMessages;
 import com.bci.microservice.exceptions.InputValidationException;
-import com.bci.microservice.repository.RevokedTokenJpaRepository;
-import com.bci.microservice.repository.UsuarioJpaRepository;
 import com.bci.microservice.response.UsuarioResponse;
 import com.bci.microservice.response.UsuarioSignUpResponse;
 import com.bci.microservice.security.TokenUtils;
+import com.bci.microservice.service.RevokedTokenService;
 import com.bci.microservice.service.UsuarioService;
 import com.bci.microservice.tokens.RevokedTokenFactory;
 import com.bci.microservice.utils.DateUtils;
-import com.bci.microservice.utils.TokenProperties;
+import com.bci.microservice.tokens.TokenProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
 /**
  * Este es el controlador que maneja solicitudes HTTP relacionadas con usuarios.
  */
@@ -50,14 +46,14 @@ public class UsuarioController {
 
     private final UsuarioService usuarioService;
     private final JwtParser jwtParser;
-    private final RevokedTokenJpaRepository revokedTokenJpaRepository;
+    private final RevokedTokenService revokedTokenService;
     private final TokenProperties tokenProperties;
 
     @Autowired
-    public UsuarioController(UsuarioService usuarioService, JwtParser jwtParser, RevokedTokenJpaRepository revokedTokenJpaRepository, TokenProperties tokenProperties) {
+    public UsuarioController(UsuarioService usuarioService, JwtParser jwtParser, RevokedTokenService revokedTokenService, TokenProperties tokenProperties) {
         this.usuarioService = usuarioService;
         this.jwtParser = jwtParser;
-        this.revokedTokenJpaRepository = revokedTokenJpaRepository;
+        this.revokedTokenService = revokedTokenService;
         this.tokenProperties = tokenProperties;
     }
 
@@ -91,7 +87,7 @@ public class UsuarioController {
             return usuarioList.map(usuario -> {
                 jwtParser.parseClaimsJws(token).getBody();
                 usuarioService.updateLastLogin(emailByToken, DateUtils.formattedDate(tokenProperties.getFormatDate()));
-                revokedTokenJpaRepository.save(RevokedTokenFactory.createRevokedToken(token));
+                revokedTokenService.save(RevokedTokenFactory.createRevokedToken(token));
 
                 Usuario updatedUser = usuarioService.getUserByEmail(emailByToken, null);
                 String newToken = TokenUtils.createToken(emailByToken, passwordByToken, tokenProperties.getExpirationTokenMs());
@@ -161,7 +157,6 @@ public class UsuarioController {
 - `UsuarioRepository`: es una interfaz que se utiliza para acceder a la base de datos de usuarios.
 - `JwtParser`: se utiliza para analizar y validar tokens JWT (JSON Web Token).
 - `RevokedTokenRepository`: es una interfaz que se utiliza para acceder a la base de datos de tokens revocados.
-- `MyAppProperties`: es una clase que contiene propiedades de configuración de la aplicación (por ejemplo, formato de fecha, tiempo de expiración del token, etc.).
 - `Usuario`: es una clase de modelo que representa a un usuario en la aplicación.
 - `UsuariosResponse`: es una clase que se utiliza para devolver información sobre el usuariodespués del inicio de sesión.
 - `UsuarioSignUpResponse`: es una clase que se utiliza para devolver información sobre el usuario después del registro.

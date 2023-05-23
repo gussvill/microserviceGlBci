@@ -1,6 +1,4 @@
-package com.bci.microservice.repository;
-
-import com.bci.microservice.entity.Usuario;
+package com.bci.microservice.interfaces;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,14 +8,14 @@ import java.util.Optional;
  * La interfaz no proporciona una implementación concreta de estos métodos, sino que define la firma de los mismos.
  */
 // define el contrato que deben cumplir las implementacion.
-public interface UsuarioRepository {
+public interface IUsuario {
     /**
      * Gets user by email.
      *
      * @param email the email
      * @return the user by email
      */
-    Optional<Usuario> getUserByEmail(String email);
+    Optional<com.bci.microservice.entity.Usuario> getUserByEmail(String email);
 
     /**
      * Gets user by email.
@@ -26,14 +24,14 @@ public interface UsuarioRepository {
      * @param nullValue the null value
      * @return the user by email
      */
-    Usuario getUserByEmail(String email, String nullValue);
+    com.bci.microservice.entity.Usuario getUserByEmail(String email, String nullValue);
 
     /**
      * Gets users.
      *
      * @return the users
      */
-    List<Usuario> getUsers();
+    List<com.bci.microservice.entity.Usuario> getUsers();
 
     /**
      * Save usuario.
@@ -41,7 +39,7 @@ public interface UsuarioRepository {
      * @param usuario the usuario
      * @return the usuario
      */
-    Usuario save(Usuario usuario);
+    com.bci.microservice.entity.Usuario save(com.bci.microservice.entity.Usuario usuario);
 
     /**
      * Update token.

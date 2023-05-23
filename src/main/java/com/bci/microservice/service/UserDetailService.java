@@ -1,7 +1,7 @@
 package com.bci.microservice.service;
 
 import com.bci.microservice.entity.Usuario;
-import com.bci.microservice.repository.UsuarioJpaRepository;
+import com.bci.microservice.interfaces.repositories.IUsuarioRepository;
 import com.bci.microservice.security.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 public class UserDetailService implements UserDetailsService {
 
     @Autowired
-    private UsuarioJpaRepository UsuarioJpaRepository;
+    private IUsuarioRepository IUsuarioRepository;
 
     @Override
-    public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
-        Usuario usuario = UsuarioJpaRepository
+    public UserDetailsImpl loadUserByUsername(String name) throws UsernameNotFoundException {
+        Usuario usuario = IUsuarioRepository
                 .findOneByName(name)
                 .orElseThrow(() -> new UsernameNotFoundException("El usuario con userName " + name + " no existe."));
 

@@ -1,7 +1,7 @@
 package com.bci.microservice.security;
 
 import com.bci.microservice.exceptions.CustomException;
-import com.bci.microservice.repository.RevokedTokenJpaRepository;
+import com.bci.microservice.interfaces.repositories.IRevokedTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private RevokedTokenJpaRepository revokedTokenJpaRepository;
+    private IRevokedTokenRepository revokedTokenJpaRepository;
 
 
     /**

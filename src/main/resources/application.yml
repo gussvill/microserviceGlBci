@@ -37,6 +37,6 @@ spring:
     format:
       date: "MMM dd, yyyy hh:mm:ss a"
 
-myapp:
+token-properties:
   formatDate: "MMM dd, yyyy hh:mm:ss a"
   expirationTokenMs: 300000
