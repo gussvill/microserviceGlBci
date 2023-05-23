@@ -9,7 +9,7 @@ import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
  * clase de utilidad que se utiliza para cifrar y descifrar contraseñas en una aplicación Java utilizando el framework Jasypt
  */
 @Slf4j
-public class EncryptDecryptPwd {
+public class EncryptDecryptPwdJasypt {
 
     private static final String DB_USERNAME = "root";
     private static final String DB_PWD = "guss2020";
