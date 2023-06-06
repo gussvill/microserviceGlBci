@@ -49,7 +49,6 @@ public class UsuarioController {
     private final RevokedTokenService revokedTokenService;
     private final TokenProperties tokenProperties;
 
-    @Autowired
     public UsuarioController(UsuarioService usuarioService, JwtParser jwtParser, RevokedTokenService revokedTokenService, TokenProperties tokenProperties) {
         this.usuarioService = usuarioService;
         this.jwtParser = jwtParser;
