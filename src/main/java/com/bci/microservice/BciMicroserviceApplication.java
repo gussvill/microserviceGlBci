@@ -7,22 +7,48 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Clase principal de una aplicación de microservicios, escrita en el lenguaje de programación Java utilizando el framework Spring Boot.
+ * Habilita la encriptación de propiedades sensibles como contraseñas.
+ * <p>
+ * La anotación @EnableEncryptableProperties permite que las propiedades encriptadas en los archivos de configuración sean desencriptadas automáticamente.
+ * </p>
  *
- * @author Gustavo Villegas
+ * <p>Autor: Gustavo Villegas</p>
  */
 @Slf4j
 @SpringBootApplication
 @EnableEncryptableProperties
-// esta anotación habilita la encriptación de propiedades en la aplicación. En otras palabras, permite que las propiedades sensibles, como contraseñas
 public class BciMicroserviceApplication {
 
     /**
-     * Metodo que inicializa la aplicación Spring Boot y lanza el servidor web integrado de la aplicación
+     * Método que inicializa la aplicación Spring Boot y lanza el servidor web integrado de la aplicación.
      *
-     * @param args the input arguments
+     * @param args argumentos de entrada
      */
     public static void main(String[] args) {
-        SpringApplication.run(BciMicroserviceApplication.class, args);
+        try {
+            SpringApplication.run(BciMicroserviceApplication.class, args);
+            log.info("Aplicación iniciada correctamente.");
+        } catch (Exception e) {
+            handleStartupException(e);
+        }
     }
 
+    private static void handleStartupException(Exception e) {
+        if (isSilentExitException(e)) {
+            log.info("Aplicación reiniciada por DevTools.");
+        } else {
+            log.error("Error al iniciar la aplicación: ", e);
+        }
+    }
+
+    private static boolean isSilentExitException(Throwable e) {
+        // Verificar la causa de la excepción para detectar reinicio silencioso
+        while (e != null) {
+            if (e.getClass().getName().equals("org.springframework.boot.devtools.restart.SilentExitExceptionHandler$SilentExitException")) {
+                return true;
+            }
+            e = e.getCause();
+        }
+        return false;
+    }
 }
