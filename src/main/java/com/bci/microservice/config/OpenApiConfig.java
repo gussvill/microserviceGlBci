@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition(info =
 @Info(
         title = "API microservicio BCI",
-        version = "v1",
+        version = "v2",
         description = "Esta es una API para el microservicio BCI. Proporciona endpoints para crear usuarios, obtener el listado de todos los usuarios y hacer login con un usuario existente.. \n\n" +
                 "El repositorio de GitHub para este proyecto se encuentra en: [GitHub](https://github.com/gussvill/microserviceGlBci.git)",
         contact = @Contact(

@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.bci'
-version = '1.0.0'
+version = '1.1.0'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
@@ -51,6 +51,10 @@ dependencies {
     testImplementation 'org.mockito:mockito-junit-jupiter:3.9.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += '-Xlint:deprecation'
 }
 
 tasks.named('test') {
