@@ -55,8 +55,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken usernamePAT = TokenUtils.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(usernamePAT);
 
-                String tokenB = request.getHeader("Authorization").substring(7);
-                if (revokedTokenJpaRepository.existsByToken(tokenB)) {
+                if (revokedTokenJpaRepository.existsByToken(token)) {
                     throw new CustomException("Token has been revoked", "{\"error\": \"Token has been revoked\"}");
                 }
 
@@ -69,6 +68,5 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
