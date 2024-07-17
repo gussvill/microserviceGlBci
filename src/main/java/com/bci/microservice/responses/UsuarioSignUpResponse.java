@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class UsuarioSignUpResponse {
+    private static ModelMapper modelMapper = new ModelMapper();
     private UUID id;
     private String created;
     private String lastLogin;
@@ -25,7 +26,6 @@ public class UsuarioSignUpResponse {
     @JsonProperty("isActive")
     private boolean isActive;
     private String message;
-    private static ModelMapper modelMapper = new ModelMapper();
 
     public static UsuarioSignUpResponse convertToUsuarioSignUpResponse(Usuario usuario) {
         return modelMapper.map(usuario, UsuarioSignUpResponse.class);

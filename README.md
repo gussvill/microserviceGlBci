@@ -18,23 +18,25 @@
 * Framework SpringBoot.
 * Uso exclusivo de Java 8+ (más de dos características propias de la versión).
 * Entrega en un repositorio público (github o bitbucket) con el código fuente y script de
-creación de BD.
+  creación de BD.
 * Readme explicando cómo probarlo.
 * Diagrama de la solución.
 * Diagrama de componentes y un diagrama de secuencia del proyecto cumpliendo estándares UML.
 
-
 ### Requisitos Opcionales
+
 * JWT como token
 * Pruebas unitarias
-* Swagger 
+* Swagger
 
 ### Registro
+
 * Ese endpoint deberá recibir un usuario con los campos "nombre", "correo", "contraseña",
-más un listado de objetos "teléfono", respetando el siguiente formato:
+  más un listado de objetos "teléfono", respetando el siguiente formato:
 
 
 * /sign-up: endpoint de creación de un usuario, cuyo contrato de entrada debe ser el siguiente:
+
 ```json
 {
   "name": "Juan Rodriguez",
@@ -49,6 +51,7 @@ más un listado de objetos "teléfono", respetando el siguiente formato:
   ]
 }
 ```
+
 ```json
 {
   "name": String,
@@ -66,28 +69,29 @@ más un listado de objetos "teléfono", respetando el siguiente formato:
 
 * Responder el código de status HTTP adecuado
 * En caso de éxito, retorne el usuario y los siguientes campos:
-  * id: id del usuario (puede ser lo que se genera por el banco de datos, pero sería
-  más deseable un UUID)
-  * created: fecha de creación del usuario
-  * modified: fecha de la última actualización de usuario
-  * last_login: del último ingreso (en caso de nuevo usuario, va a coincidir con la
-  fecha de creación)
-  * token: token de acceso de la API (puede ser UUID o JWT)
-  * isactive: Indica si el usuario sigue habilitado dentro del sistema.
-  * Si caso el correo conste en la base de datos, deberá retornar un error "El correo ya
-    registrado".
-  * Donde el correo debe seguir una expresión regular para validar que formato sea el
-    correcto. (aaaaaaa@undominio.algo), si no cumple enviar mensaje de error.
-  * La clave debe seguir una expresión regular para validar que formato sea el correcto.
-    Debe tener solo una Mayúscula y solamente dos números (no necesariamente
-    consecutivos), en combinación de letras minúsculas, largo máximo de 12 y mínimo 8.
-    "a2asfGfdfdf4", si no cumple enviar mensaje de error.
-  * El token deberá ser persistido junto con el usuario
-  * El usuario debe ser persistido en una BD utilizando spring data (deseable H2). En caso
-    de la contraseña, sería ideal que pudiese ser encriptada.
-  * Si el usuario ya existe, debe enviar mensaje de error indicando que ya existe.
+    * id: id del usuario (puede ser lo que se genera por el banco de datos, pero sería
+      más deseable un UUID)
+    * created: fecha de creación del usuario
+    * modified: fecha de la última actualización de usuario
+    * last_login: del último ingreso (en caso de nuevo usuario, va a coincidir con la
+      fecha de creación)
+    * token: token de acceso de la API (puede ser UUID o JWT)
+    * isactive: Indica si el usuario sigue habilitado dentro del sistema.
+    * Si caso el correo conste en la base de datos, deberá retornar un error "El correo ya
+      registrado".
+    * Donde el correo debe seguir una expresión regular para validar que formato sea el
+      correcto. (aaaaaaa@undominio.algo), si no cumple enviar mensaje de error.
+    * La clave debe seguir una expresión regular para validar que formato sea el correcto.
+      Debe tener solo una Mayúscula y solamente dos números (no necesariamente
+      consecutivos), en combinación de letras minúsculas, largo máximo de 12 y mínimo 8.
+      "a2asfGfdfdf4", si no cumple enviar mensaje de error.
+    * El token deberá ser persistido junto con el usuario
+    * El usuario debe ser persistido en una BD utilizando spring data (deseable H2). En caso
+      de la contraseña, sería ideal que pudiese ser encriptada.
+    * Si el usuario ya existe, debe enviar mensaje de error indicando que ya existe.
 
 * En caso de error de un endpoint debe retornar:
+
 ```json
 {
   "error": [{
@@ -99,10 +103,11 @@ más un listado de objetos "teléfono", respetando el siguiente formato:
 ```
 
 ### Deseable
+
 * /login: endpoint el cual será para consultar el usuario, para ello debe utilizar el token generado
-en el endpoint anterior para realizar la consulta y así retornar toda la información del usuario
-persistido, considere que el token debe cambiar al ejecutar por lo que se actualizará el token.
-  * El contrato de salida debe ser:
+  en el endpoint anterior para realizar la consulta y así retornar toda la información del usuario
+  persistido, considere que el token debe cambiar al ejecutar por lo que se actualizará el token.
+    * El contrato de salida debe ser:
 
 ```json
 {
@@ -170,7 +175,8 @@ java -jar build/libs/bci-microservice-0.0.1-SNAPSHOT.jar
 
 El microservicio tiene dos endpoints:
 
-* POST http://localhost:8081/bci-microservice/api/sign-up: Este endpoint es para crear un usuario. Debe enviar una solicitud POST con el siguiente contrato de
+* POST http://localhost:8081/bci-microservice/api/sign-up: Este endpoint es para crear un usuario. Debe enviar una
+  solicitud POST con el siguiente contrato de
   entrada en formato JSON:
 
 ```json
@@ -205,7 +211,8 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 }
 ```
 
-* GET http://localhost:8081/bci-microservice/api/login: Devuelve la siguiente información del usuario, una vez autenticándose con el token generado anteriormente
+* GET http://localhost:8081/bci-microservice/api/login: Devuelve la siguiente información del usuario, una vez
+  autenticándose con el token generado anteriormente
   y con el siguiente contrato de entrada en formato JSON:
 
 ```json
@@ -230,7 +237,8 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 }
 ```
 
-* GET http://localhost:8081/bci-microservice/api/users: Devuelve la lista de todos los usuarios, una vez autenticándose con el token asociado al usuario.:
+* GET http://localhost:8081/bci-microservice/api/users: Devuelve la lista de todos los usuarios, una vez autenticándose
+  con el token asociado al usuario.:
 
 ```json
 {
@@ -260,6 +268,7 @@ El endpoint retorna el siguiente contrato de salida en formato JSON:
 ### Guides
 
 * Utilizar el archivo postman incluido en la carpeta documentations para probar los endpoints.
-* Como alternativa se puede utilizar la url de Swagger para probar los endpoints: http://localhost:8081/bci-microservice/api/swagger-ui/index.html
+* Como alternativa se puede utilizar la url de Swagger para probar los
+  endpoints: http://localhost:8081/bci-microservice/api/swagger-ui/index.html
 
 

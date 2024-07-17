@@ -8,11 +8,11 @@ spring:
   application:
     name: springboot-bci-microservice
   datasource:
-#    driverClassName: com.mysql.cj.jdbc.Driver
+    #    driverClassName: com.mysql.cj.jdbc.Driver
     driverClassName: org.h2.Driver
     password: ENC(NBX2RHYV6K3Gf1eHI93Xad1FwdN0ED9u)
     url: 'jdbc:h2:mem:testdb'
-#    url: 'jdbc:mysql://172.17.0.2:3306/develop?useSSL=false&serverTimezone=America/Santiago&allowPublicKeyRetrieval=true'
+    #    url: 'jdbc:mysql://172.17.0.2:3306/develop?useSSL=false&serverTimezone=America/Santiago&allowPublicKeyRetrieval=true'
     username: ENC(LTuzsowYJ7DHzacC0mkGNg==)
     hikari:
       auto-commit: true
@@ -25,7 +25,7 @@ spring:
       path: /h2-console
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
-#    database-platform: org.hibernate.dialect.MySQL8Dialect
+    #    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         show_sql: true

@@ -1,124 +1,124 @@
 {
-	"info": {
-		"_postman_id": "3eb06364-730f-45e8-9b98-c2dcebcd3df5",
-		"name": "BCI Microservicio Test",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "1661805"
-	},
-	"item": [
-		{
-			"name": "http://localhost:8081/sign-up",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\" : \"Gustavo Villegas\",\n    \"email\" : \"gussvill@gmail.com\",\n    \"password\": \"Guss2020\",\n    \"phones\": [ \n        {\n            \"number\": 5255766,\n            \"cityCode\": 2,\n            \"countryCode\": \"56\"\n        },\n        {\n            \"number\": 93099285,\n            \"cityCode\": 9,\n            \"countryCode\": \"56\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/bci-microservice/api/sign-up",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"bci-microservice",
-						"api",
-						"sign-up"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:8081/users",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ4NzA0MjQsInBhc3N3b3JkIjoiJDJhJDEwJENlUWdKWlZHQ3BzMkcwbEpsTk1jbWVkd1luN1R6VUdYeGd1WEdVUW82QXdJRXlQbDZWRXQ2In0.Roj8-uRkGKBTic49qJ9vpAiD_Iicxn4eUnIx3mdX7_Q",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "http://localhost:8081/bci-microservice/api/users",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"bci-microservice",
-						"api",
-						"users"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "http://localhost:8081/login",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ4NzA0MzcsInBhc3N3b3JkIjoiJDJhJDEwJENlUWdKWlZHQ3BzMkcwbEpsTk1jbWVkd1luN1R6VUdYeGd1WEdVUW82QXdJRXlQbDZWRXQ2In0.6TKVtPmbetX6XYH48LhNIF1lC7Ep9xEcMqjnjZ25L5s",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8081/bci-microservice/api/login",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8081",
-					"path": [
-						"bci-microservice",
-						"api",
-						"login"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "3eb06364-730f-45e8-9b98-c2dcebcd3df5",
+    "name": "BCI Microservicio Test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1661805"
+  },
+  "item": [
+    {
+      "name": "http://localhost:8081/sign-up",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"name\" : \"Gustavo Villegas\",\n    \"email\" : \"gussvill@gmail.com\",\n    \"password\": \"Guss2020\",\n    \"phones\": [ \n        {\n            \"number\": 5255766,\n            \"cityCode\": 2,\n            \"countryCode\": \"56\"\n        },\n        {\n            \"number\": 93099285,\n            \"cityCode\": 9,\n            \"countryCode\": \"56\"\n        }\n    ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/bci-microservice/api/sign-up",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "bci-microservice",
+            "api",
+            "sign-up"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8081/users",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ4NzA0MjQsInBhc3N3b3JkIjoiJDJhJDEwJENlUWdKWlZHQ3BzMkcwbEpsTk1jbWVkd1luN1R6VUdYeGd1WEdVUW82QXdJRXlQbDZWRXQ2In0.Roj8-uRkGKBTic49qJ9vpAiD_Iicxn4eUnIx3mdX7_Q",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:8081/bci-microservice/api/users",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "bci-microservice",
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8081/login",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJndXNzdmlsbEBnbWFpbC5jb20iLCJleHAiOjE2ODQ4NzA0MzcsInBhc3N3b3JkIjoiJDJhJDEwJENlUWdKWlZHQ3BzMkcwbEpsTk1jbWVkd1luN1R6VUdYeGd1WEdVUW82QXdJRXlQbDZWRXQ2In0.6TKVtPmbetX6XYH48LhNIF1lC7Ep9xEcMqjnjZ25L5s",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8081/bci-microservice/api/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "bci-microservice",
+            "api",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
 }

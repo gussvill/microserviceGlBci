@@ -4,7 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -66,6 +74,24 @@ public class Usuario {
     @Schema(hidden = true)
     private String listPhones;
 
+    /**
+     * Instantiates a new Usuario.
+     *
+     * @param email    the email
+     * @param password the password
+     */
+    public Usuario(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    /**
+     * Instantiates a new Usuario.
+     */
+    public Usuario() {
+
+    }
+
     public String getListPhones() {
         return listPhones;
     }
@@ -84,25 +110,6 @@ public class Usuario {
             // Manejar la excepción si ocurre algún error durante la conversión
             e.printStackTrace();
         }
-    }
-
-
-    /**
-     * Instantiates a new Usuario.
-     *
-     * @param email    the email
-     * @param password the password
-     */
-    public Usuario(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    /**
-     * Instantiates a new Usuario.
-     */
-    public Usuario() {
-
     }
 
     /**

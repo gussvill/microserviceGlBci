@@ -20,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +32,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UsuarioControllerTest {
@@ -76,6 +82,7 @@ public class UsuarioControllerTest {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         verify(usuarioService, times(1)).save(any(Usuario.class));
     }
+
     @Test
     public void testSignUpUserExists() {
         // Define el mensaje esperado que deberia devolver el controlador
@@ -97,7 +104,6 @@ public class UsuarioControllerTest {
         assertEquals(HttpStatus.BAD_REQUEST.value(), exception.getCodigo());
         assertEquals(expectedMessage, exception.getDetail());
     }
-
 
 
     @Test
