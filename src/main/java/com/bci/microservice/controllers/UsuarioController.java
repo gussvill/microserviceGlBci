@@ -36,16 +36,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Este es el controlador que maneja solicitudes HTTP relacionadas con usuarios.
- */
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @Validated
-/**
- * Optional: Optional is a new class in Java 1.8 that allows to represent values that may or may not be present.
- * Date and Time API: The Date and Time API provides classes to represent dates, times and periods in Java 1.8.
- */
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -67,7 +60,9 @@ public class UsuarioController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/users")
     public ResponseEntity<List<Usuario>> getUsers() {
-        List<Usuario> users = usuarioService.getUsers().stream().sorted(Comparator.comparing(Usuario::getEmail)).collect(Collectors.toList());
+        List<Usuario> users = usuarioService.getUsers().stream()
+                .sorted(Comparator.comparing(Usuario::getEmail))
+                .collect(Collectors.toList());
         return ResponseEntity.ok(users);
     }
 
@@ -80,6 +75,9 @@ public class UsuarioController {
     @SecurityRequirement(name = "bearerAuth")
     @GetMapping("/login")
     public ResponseEntity<UsuarioResponse> login(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_TOKEN.getMessage());
+        }
 
         String token = authHeader.substring(7); // Remove "Bearer " prefix
         String emailByToken = TokenUtils.getEmailByToken(token);
@@ -100,62 +98,37 @@ public class UsuarioController {
 
                 return ResponseEntity.accepted().body(usuarioResponse);
             }).orElseThrow(() -> new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_NOT_EXISTS.getMessage()));
-
         } catch (JwtException e) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_TOKEN.getMessage());
         }
     }
 
-    /**
-     * Sign up response entity.
-     *
-     * @param usuario the usuario
-     * @return the response entity
-     */
     @Operation(summary = "Registrar un nuevo usuario")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Usuario creado con éxito", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioSignUpResponse.class))}),
             @ApiResponse(responseCode = "400", description = "Datos inválidos ingresados o el usuario ya existe", content = @Content)})
     @PostMapping("/sign-up")
     public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
-
         Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
 
-        if (!usuarioList.isPresent()) {
-            if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
-                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_PASSWORD.getMessage());
-            }
-
-            usuario.setPassword(usuarioService.passwordEncoder(usuario.getPassword()));
-            usuario.setCreated(DateUtils.formattedDate(tokenProperties.getFormatDate()));
-            usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
-            usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), tokenProperties.getExpirationTokenMs()));
-            usuario.setActive(true);
-            usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
-            usuario.setPhonesAsJson(usuario.getPhones());
-            Usuario usuarioSave = usuarioService.save(usuario);
-            UsuarioSignUpResponse usuarioSignUpResponse = UsuarioSignUpResponse.convertToUsuarioSignUpResponse(usuarioSave);
-
-            return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
-        } else {
+        if (usuarioList.isPresent()) {
             throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_EXISTS.getMessage());
         }
+
+        if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_PASSWORD.getMessage());
+        }
+
+        usuario.setPassword(usuarioService.passwordEncoder(usuario.getPassword()));
+        usuario.setCreated(DateUtils.formattedDate(tokenProperties.getFormatDate()));
+        usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
+        usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), tokenProperties.getExpirationTokenMs()));
+        usuario.setActive(true);
+        usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
+        usuario.setPhonesAsJson(usuario.getPhones());
+        Usuario usuarioSave = usuarioService.save(usuario);
+        UsuarioSignUpResponse usuarioSignUpResponse = UsuarioSignUpResponse.convertToUsuarioSignUpResponse(usuarioSave);
+
+        return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
     }
 }
-
-/*
-- `@CrossOrigin(origins = "http://localhost:8081")`: permite solicitudes HTTP de origen cruzado (CORS) desde el origen especificado (en este caso, http://localhost:8081).
-- `@RestController`: indica que esta clase es un controlador de Spring que maneja solicitudes HTTP y devuelve objetos JSON.
-- `@Validated`: se utiliza para validar los objetos de entrada de las solicitudes HTTP.
-- `@GetMapping("/users")`: mapea la solicitud GET a la ruta "/users" y devuelve una lista de usuarios.
-- `@GetMapping("/login")`: mapea la solicitud GET a la ruta "/login" y maneja el inicio de sesión del usuario.
-- `@PostMapping("/sign-up")`: mapea la solicitud POST a la ruta "/sign-up" y maneja el registro de un nuevo usuario.
-- `@Autowired`: se utiliza para inyectar dependencias de Spring en la clase (por ejemplo, `UsuarioRepository`, `PasswordEncoder`, etc.).
-- `UsuarioQueryServiceImpl`: es una implementación de servicio que se utiliza para realizar consultas de usuario en la base de datos.
-- `UsuarioRepository`: es una interfaz que se utiliza para acceder a la base de datos de usuarios.
-- `JwtParser`: se utiliza para analizar y validar tokens JWT (JSON Web Token).
-- `RevokedTokenRepository`: es una interfaz que se utiliza para acceder a la base de datos de tokens revocados.
-- `Usuario`: es una clase de modelo que representa a un usuario en la aplicación.
-- `UsuariosResponse`: es una clase que se utiliza para devolver información sobre el usuariodespués del inicio de sesión.
-- `UsuarioSignUpResponse`: es una clase que se utiliza para devolver información sobre el usuario después del registro.
- */
