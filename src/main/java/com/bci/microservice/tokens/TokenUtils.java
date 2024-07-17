@@ -71,7 +71,7 @@ public class TokenUtils {
     }
 
     private static Claims getClaims(String token) {
-        return Jwts.parserBuilder()
+        return Jwts.parser()
                 .setSigningKey(Keys.hmacShaKeyFor(ACCESS_TOKEN_SECRET.getBytes()))
                 .build()
                 .parseClaimsJws(token)
