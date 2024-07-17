@@ -24,6 +24,7 @@ public class UsuarioSignUpResponse {
     private String token;
     @JsonProperty("isActive")
     private boolean isActive;
+    private String message;
     private static ModelMapper modelMapper = new ModelMapper();
 
     public static UsuarioSignUpResponse convertToUsuarioSignUpResponse(Usuario usuario) {

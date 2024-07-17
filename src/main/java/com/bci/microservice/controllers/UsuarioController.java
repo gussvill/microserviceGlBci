@@ -115,31 +115,26 @@ public class UsuarioController {
     @PostMapping("/sign-up")
     public ResponseEntity<UsuarioSignUpResponse> signUp(@Valid @RequestBody Usuario usuario) {
 
-        try {
+        Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
 
-            Optional<Usuario> usuarioList = usuarioService.getUserByEmail(usuario.getEmail());
-
-            if (!usuarioList.isPresent()) {
-                if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
-                    throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_PASSWORD.getMessage());
-                }
-
-                usuario.setPassword(usuarioService.passwordEncoder(usuario.getPassword()));
-                usuario.setCreated(DateUtils.formattedDate(tokenProperties.getFormatDate()));
-                usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
-                usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), tokenProperties.getExpirationTokenMs()));
-                usuario.setActive(true);
-                usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
-                usuario.setPhonesAsJson(usuario.getPhones());
-                Usuario usuarioSave = usuarioService.save(usuario);
-                UsuarioSignUpResponse usuarioSignUpResponse = UsuarioSignUpResponse.convertToUsuarioSignUpResponse(usuarioSave);
-
-                return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
-            } else {
-                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_EXISTS.getMessage());
+        if (!usuarioList.isPresent()) {
+            if (!usuario.getPassword().matches("^(?=.*[A-Z])(?=.*\\d.*\\d)[a-zA-Z\\d]{8,12}$")) {
+                throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_PASSWORD.getMessage());
             }
-        } catch (Exception e) {
-            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_DATA.getMessage());
+
+            usuario.setPassword(usuarioService.passwordEncoder(usuario.getPassword()));
+            usuario.setCreated(DateUtils.formattedDate(tokenProperties.getFormatDate()));
+            usuario.setLastLogin(ErrorMessages.INVALID_LAST_LOGIN.getMessage());
+            usuario.setToken(TokenUtils.createToken(usuario.getEmail(), usuario.getPassword(), tokenProperties.getExpirationTokenMs()));
+            usuario.setActive(true);
+            usuario.setName(StringUtils.isNotBlank(usuario.getName()) ? usuario.getName() : "");
+            usuario.setPhonesAsJson(usuario.getPhones());
+            Usuario usuarioSave = usuarioService.save(usuario);
+            UsuarioSignUpResponse usuarioSignUpResponse = UsuarioSignUpResponse.convertToUsuarioSignUpResponse(usuarioSave);
+
+            return new ResponseEntity<>(usuarioSignUpResponse, HttpStatus.CREATED);
+        } else {
+            throw new InputValidationException(HttpStatus.BAD_REQUEST.value(), ErrorMessages.INVALID_USER_EXISTS.getMessage());
         }
     }
 }
