@@ -32,14 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UsuarioControllerTest {
@@ -60,9 +53,6 @@ public class UsuarioControllerTest {
     private UsuarioController usuarioController;
 
     private Usuario usuario;
-
-    private Usuario existingUser;
-
 
     @BeforeEach
     public void setUp() {
@@ -85,26 +75,20 @@ public class UsuarioControllerTest {
 
     @Test
     public void testSignUpUserExists() {
-        // Define el mensaje esperado que deberia devolver el controlador
         String expectedMessage = ErrorMessages.INVALID_USER_EXISTS.getMessage();
 
-        // Crea un usuario existente simulado
         Usuario existingUser = new Usuario();
         existingUser.setEmail("test@example.com");
 
-        // Simula el comportamiento del servicio para retornar un usuario existente
         when(usuarioService.getUserByEmail(anyString())).thenReturn(Optional.of(existingUser));
 
-        // Verifica que la excepcion lanzada contiene el mensaje esperado
         InputValidationException exception = assertThrows(InputValidationException.class, () -> {
             usuarioController.signUp(existingUser);
         });
 
-        // Verifica que la excepcion contenga el mensaje correcto
         assertEquals(HttpStatus.BAD_REQUEST.value(), exception.getCodigo());
         assertEquals(expectedMessage, exception.getDetail());
     }
-
 
     @Test
     public void testLoginSuccess() {
@@ -125,7 +109,6 @@ public class UsuarioControllerTest {
             when(tokenProperties.getFormatDate()).thenReturn("yyyy-MM-dd HH:mm:ss");
             mockedDateUtils.when(() -> DateUtils.formattedDate(anyString())).thenReturn(formattedDate);
 
-            // Configurando usuario con valores esperados despues de la actualizacion
             Usuario updatedUser = new Usuario();
             updatedUser.setEmail(email);
             updatedUser.setToken(token);
@@ -149,7 +132,6 @@ public class UsuarioControllerTest {
         String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.invalid_signature";
         String email = "test@example.com";
 
-        // Mocking the static methods of TokenUtils
         try (MockedStatic<TokenUtils> mockedTokenUtils = mockStatic(TokenUtils.class)) {
             mockedTokenUtils.when(() -> TokenUtils.getEmailByToken(anyString())).thenReturn(email);
             mockedTokenUtils.when(() -> TokenUtils.getPasswordByToken(anyString())).thenReturn("Password123");
